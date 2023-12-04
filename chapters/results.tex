@@ -50,7 +50,7 @@ Recall from statistics that the expectation of a binary payoff, like intersectio
 
 We then want to estimate the expected number of interferences when the sizes of the subsets are within a certain offset of $r$, say $\delta$ without being exactly equal to $r$. This approach will make our results more applicable to models like the Neuroidal Model that assume memory sizes follow some distribution \cite{valiant2005memorization}. The offset can be selected to best suit the distribution involved. For example if the sizes come from a discrete distribution like $\mathcal{B}(r/p,p)$, and if the variance $r(1-p)$ is more than $10$, it makes sense to choose $\delta  = 2\sqrt{r(1-p)}$ since roughly 95\% of all values lie within $[r-2\sigma,r+2\sigma]$.
 
-Generalizing this without any further assumptions is quite hard as the expectation operator does not behave nicely with binomial coefficients as in lemma \ref{lemma:k-int-prob}. Instead we will make a reasonable assumption that will allow us to derive a reasonable lower bound for this expectation in terms of a general parameter instead of individual subset sizes. 
+Generalizing this without any further assumptions is quite hard as the binomial coefficients do not vary nicely as a function of two variables over their domain. Instead we will make a reasonable assumption that will allow us to derive a reasonable lower bound for this expectation in terms of a general parameter instead of individual subset sizes. 
 
 \begin{lemma}
     \label{lemma:expected-k-int-prob}
