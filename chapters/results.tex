@@ -60,7 +60,7 @@ Generalizing this without any further assumptions is quite hard as the binomial 
             \item $n >> 2(r+\delta)$, 
         \end{enumerate}      
 then $$ \bar{F}_Y\left(\left\lfloor \frac{r_w}{k} 
-\right\rfloor\right) \ge \sum_{y = \left\lceil \frac{r-\delta}{k} \right\rceil}^{\left\lfloor r - \delta \right\rfloor} \frac{\binom{r-\delta}{y} \binom{n-r-\delta}{r-\delta-y}}{\binom{n}{r+\delta}}$$
+\right\rfloor\right) \ge \sum_{y = \left\lceil \frac{r+\delta}{k} \right\rceil}^{\left\lfloor r - \delta \right\rfloor} \frac{\binom{r-\delta}{y} \binom{n-r-\delta}{r-\delta-y}}{\binom{n}{r+\delta}}$$
     \end{lemma}
     \textit{Remark.} Before proceeding with the proof, we want to justify the second assumption made here. It is a known fact that bounding binomial coefficients above or below is hard due to the nature of how it varies with respect to the second argument. We know that $n \choose k$ reaches its maximum value at $\left\lceil \frac{n}{2} \right\rceil$ or $\left\lfloor \frac{n}{2} \right\rfloor$ and it is monotonically increasing at smaller values and decreasing at larger values. My making the assumption here we can ensure that our second argument is always a lot smaller than this maxima, and as such an increase in the second argument will only increase the value of the expression. This assumption is reasonable since models like the Neuroidal Model expect the memory sizes to be significantly smaller than the size of the model \cite{valiant2005memorization}. Also note that the binomial coefficient increases monotonically with respect to the first argument. 
     \begin{proof}  
@@ -73,10 +73,10 @@ then $$ \bar{F}_Y\left(\left\lfloor \frac{r_w}{k}
                  \sum_{y = \left\lceil \frac{r_w}{k} \right\rceil}^{r_w} \mathbb{P}(Y=y)  
                 \\[2em] &=    \sum_{y = \left\lceil \frac{r_w}{k} \right\rceil}^{r_w} \frac{\binom{r_u}{y} \binom{n-r_u}{r_w-y}}{\binom{n}{r_w}} 
                 \\[2em] &\ge  \sum_{y = \left\lceil \frac{r_w}{k} \right\rceil}^{r_w} \frac{\binom{r-\delta}{y} \binom{n-r-\delta}{r-\delta-y}}{\binom{n}{r+\delta}}  
-                \\[2em] &\ge  \sum_{y = \left\lceil \frac{r-\delta}{k} \right\rceil}^{\left\lfloor r - \delta \right\rfloor} \frac{\binom{r-\delta}{y} \binom{n-r-\delta}{r-\delta-y}}{\binom{n}{r+\delta}}  
+                \\[2em] &\ge  \sum_{y = \left\lceil \frac{r+\delta}{k} \right\rceil}^{\left\lfloor r - \delta \right\rfloor} \frac{\binom{r-\delta}{y} \binom{n-r-\delta}{r-\delta-y}}{\binom{n}{r+\delta}}  
             \end{split}
         \end{equation}
-        The first and second equalities follow from the definition of the tail distribution and lemma \ref{lemma:k-int-prob} respectively. The second inequality follows from assumption 1. in the theorem and the behavior of the binomial coefficient under varying arguments. The final inequality follows from the fact that since all terms in the sum are positive, reducing the number of terms will make the overall expression smaller. Note that while reducing the lower limit from $\left\lceil \frac{r_w}{k} \right\rceil$ to $\left\lceil \frac{r-\delta}{k} \right\rceil$ might lead to addition of more terms, it will always be less than the number of terms removed due to changing the upper limit from $r_w$ to $r-\delta$.
+        The first and second equalities follow from the definition of the tail distribution and lemma \ref{lemma:k-int-prob} respectively. The second inequality follows from assumption 1. in the theorem and the behavior of the binomial coefficient under varying arguments. The final inequality follows from the fact that since all terms in the sum are positive, reducing the number of terms will make the overall expression smaller.
         
     \end{proof}
 
@@ -146,7 +146,7 @@ We will now tackle the general case using the same strategy as above.
 \begin{theorem}
     Given a set $V$ with $n$ items, the $(r,T,k,\delta)$-subset capacity of $V$ is bounded above by
     \begin{equation*}
-     \frac{T}{\sum_{y = \left\lceil \frac{r-\delta}{k} \right\rceil}^{\left\lfloor r - \delta \right\rfloor} \frac{\binom{r-\delta}{y} \binom{n-r-\delta}{r-\delta-y}}{\binom{n}{r+\delta}}} + 1
+     \frac{T}{\sum_{y = \left\lceil \frac{r+\delta}{k} \right\rceil}^{\left\lfloor r - \delta \right\rfloor} \frac{\binom{r-\delta}{y} \binom{n-r-\delta}{r-\delta-y}}{\binom{n}{r+\delta}}} + 1
     \end{equation*}
 \end{theorem}
 
@@ -183,14 +183,14 @@ Using lemma \ref{lemma:expected-k-int-prob} we get
 \label{equ:cap-r-2}
     \begin{split}
            M &\ge
-           \frac{1}{T}\sum_{(i,j) \in \Z\times\Z, 1 \le i,j \le M, i \ne j}  \Biggl( 2 \sum_{y = \left\lceil \frac{r-\delta}{k} \right\rceil}^{\left\lfloor r - \delta \right\rfloor} \frac{\binom{r-\delta}{y} \binom{n-r-\delta}{r-\delta-y}}{\binom{n}{r+\delta}}\Biggr) \\
-           &=\frac{1}{T} \frac{M(M-1)}{2} \Biggl( 2 \sum_{y = \left\lceil \frac{r-\delta}{k} \right\rceil}^{\left\lfloor r - \delta \right\rfloor} \frac{\binom{r-\delta}{y} \binom{n-r-\delta}{r-\delta-y}}{\binom{n}{r+\delta}}\Biggr),
+           \frac{1}{T}\sum_{(i,j) \in \Z\times\Z, 1 \le i,j \le M, i \ne j}  \Biggl( 2 \sum_{y = \left\lceil \frac{r+\delta}{k} \right\rceil}^{\left\lfloor r - \delta \right\rfloor} \frac{\binom{r-\delta}{y} \binom{n-r-\delta}{r-\delta-y}}{\binom{n}{r+\delta}}\Biggr) \\
+           &=\frac{1}{T} \frac{M(M-1)}{2} \Biggl( 2 \sum_{y = \left\lceil \frac{r+\delta}{k} \right\rceil}^{\left\lfloor r - \delta \right\rfloor} \frac{\binom{r-\delta}{y} \binom{n-r-\delta}{r-\delta-y}}{\binom{n}{r+\delta}}\Biggr),
     \end{split}
     \end{equation} \\
 \noindent which implies 
 \begin{equation}
     \label{equ:cap-r-bounded}     
-    M \le \frac{T}{\sum_{y = \left\lceil \frac{r-\delta}{k} \right\rceil}^{\left\lfloor r - \delta \right\rfloor} \frac{\binom{r-\delta}{y} \binom{n-r-\delta}{r-\delta-y}}{\binom{n}{r+\delta}}} + 1.
+    M \le \frac{T}{\sum_{y = \left\lceil \frac{r+\delta}{k} \right\rceil}^{\left\lfloor r - \delta \right\rfloor} \frac{\binom{r-\delta}{y} \binom{n-r-\delta}{r-\delta-y}}{\binom{n}{r+\delta}}} + 1.
 \end{equation}
 The expected $(r,T,k,\delta)$-subset capacity of $V$ should be bounded above by this expression and the tightness of the bound will depend on the parameter $\delta$. 
 \end{proof}
