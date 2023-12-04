@@ -83,9 +83,9 @@ then $$ \bar{F}_Y\left(\left\lfloor \frac{r_w}{k}
     \subsection{Capacity}
     With the above lemmas in our arsenal we can now move on  the main subject of this thesis. We now formally define the capacity of a system of overlapping subsets with interference being the limiting factor. 
 
-    \begin{definition} (\textbf{(\textit{$r,T,k,\delta$})-Subset Capacity}) Given a set $V = \{v_1,...,v_n\}$, and parameters $r, T, k, \delta > 0$, the \textit{$(r,T,k,\delta)$-subset capacity} of $V$ is the \textit{maximum} number of subsets that can be picked subject to the conditions that any randomly picked subset $U$,
+    \begin{definition} (\textbf{(\textit{$r,T,k,\delta$})-Subset Capacity}) Given a set $V = \{v_1,...,v_n\}$, and parameters $r, T, k, \delta > 0$, the \textit{$(r,T,k,\delta)$-subset capacity} of $V$ is the \textit{maximum} number of subsets that can be picked subject to the conditions that for any randomly picked subset $U$,
         \begin{enumerate}
-            \item $r' \in [r-\delta,r+\delta]$,
+            \item $|U| \in [r-\delta,r+\delta]$,
             \item $n >> 2(r+\delta)$,
             \item \label{equ:cap-bound-expected}$E[X_U] \le T$ where $X_U$ is a random variable denoting the number of interferences caused due to picking $U$. 
         \end{enumerate}
