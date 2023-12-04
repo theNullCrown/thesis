@@ -46,7 +46,7 @@ For brevity, we can reinterpret the above probability as the tail distribution f
 $$
 \mathbb{P}\left(Y \geq \left\lceil \frac{r_w}{k} \right\rceil\right) = \mathbb{P}\left(Y > \left\lfloor \frac{r_w}{k} \right\rfloor\right) = \bar{F}_Y\left(\left\lfloor \frac{r_w}{k} \right\rfloor\right)
 $$
-Recall from statistics that the expectation of a binary payoff, like intersection, that depends on a cutoff (in this case $\left\lceil \frac{r_w}{k} \right\rceil$) is equal to $\mathbb{P}\left(Y \geq \left\lceil \frac{r_w}{k} \right\rceil\right)$. Therefore the probability in lemma \ref{lemma:k-int-prob} is equal to the expected number of interferences of $U$ with $W$. 
+Recall from statistics that the expectation of a binary payoff, like intersection, that depends on a cutoff (in this case $\left\lceil \frac{r_w}{k} \right\rceil$) is equal to the probability of the variable being greater than or equal to the cutoff. Therefore the probability in lemma \ref{lemma:k-int-prob} is equal to the expected number of interferences of $U$ with $W$. 
 
 We then want to estimate the expected number of interferences when the sizes of the subsets are within a certain offset of $r$, say $\delta$ without being exactly equal to $r$. This approach will make our results more applicable to models like the Neuroidal Model that assume memory sizes follow some distribution \cite{valiant2005memorization}. The offset can be selected to best suit the distribution involved. For example if the sizes come from a discrete distribution like $\mathcal{B}(r/p,p)$, and if the variance $r(1-p)$ is more than $10$, it makes sense to choose $\delta  = 2\sqrt{r(1-p)}$ since roughly 95\% of all values lie within $[r-2\sigma,r+2\sigma]$.
 
