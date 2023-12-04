@@ -11,6 +11,13 @@ We now formally define a notion of interference.
     \end{equation}
 \end{definition}
 
+\begin{corollary}
+    \label{collorary:k-int-equals}
+        If $|U| = |W|$, then $U$ $k$-interferes with $W$ if and only if $W$ $k$-interferes with $U$.
+    \end{corollary}
+    
+We restrict the upper range of $k$ to $|W|$ for convenience, as beyond that all values of $\frac{|W|}{k}$ will be less than 1.
+
 This is a generalization of the notion of interference introduced by Valiant in 2005. Valiant defines a memory to be in a ``firing" state if more than half the nodes in the memory are in a ``firing" state. He then defines interference as the unintential firing of a memory $W$ when another memory $U$ is fired, which is possible if and only if more than half the nodes of $W$ are also present in $U$ \cite{valiant2005memorization}. This corresponds to the $k = 2$ case of our definition. 
 
 We are now interested in finding the probability of a randomly picked subset interfering with another randomly picked subset. We start with the case where they are randomly picked as we believe it is the simplest case. 
@@ -40,127 +47,157 @@ $$
 $$
 Recall from statistics that the expectation of a binary payoff, like intersection, that depends on a cutoff (in this case $\left\lceil \frac{r_w}{k} \right\rceil$) is equal to $\mathbb{P}\left(Y \geq \left\lceil \frac{r_w}{k} \right\rceil\right)$. Therefore the probability in lemma \ref{lemma:k-int-prob} is equal to the expected number of interferences of $U$ with $W$. 
 
-We then want to find an expectation for the expected number of interferences when the sizes of the subsets are derived from a distribution with a common mean. This approach will make our results more applicable to models like the Neuroidal Model that assume memory sizes follow some distribution \cite{valiant2005memorization}. 
+We then want to find the expected number of interferences when the sizes of the subsets are within a certain offset of $r$, say $\delta$ without being exactly equal to $r$. This approach will make our results more applicable to models like the Neuroidal Model that assume memory sizes follow some distribution \cite{valiant2005memorization}. The offset can be selected to best suit the distribution involved. For example if the sizes come from $\mathcal{N}(r,\sigma)$, it makes sense to choose $\delta  = 3\sigma$ since 99.7\% of all values lie within $[r-3\sigma,r+3\sigma]$. 
 
-Finding this expectation without any further assumptions is quite hard as the expectation operator does not behave nicely with binomial coefficients as in lemma \ref{lemma:k-int-prob}. Instead we will make a few reasonable assumptions that will allow us to derive a reasonable lower bound for this expectation, especially as the size of set $n \to \infty$. Before proceeding further, we will establish a well-known lower and upper bound for the binomial coefficent. 
-
-\begin{lemma}
-\label{lemma:binomial-lower-bound}
-Given $n \in [0, \infty)$ and $ k \in (0, \infty)$, we have
-$$
-\left(\frac{n}{k}\right)^{k} \le {n \choose k} \le \left(\frac{en}{k}\right)^{k}
-$$
-\end{lemma}
-\begin{proof}
-    First we will prove the lower bound. 
-    For $k=1$, we have $$\left( \frac{n}{k} \right)^k = n \leq n = \binom{n}{k}.$$ Then, for $k > 1$ pick $m$ such that $0 < m < k \le n$. Then we have 
-    $$
-    k \leq n \Rightarrow \frac{m}{n} \leq \frac{m}{k} \Rightarrow 1 - \frac{m}{k} \leq 1- \frac{m}{n} \Rightarrow \frac{k-m}{k} \leq \frac{n-m}{n} \Rightarrow \frac{n}{k} \leq \frac{n-m}{k-m}
-    $$
-    Therefore,
-    $$
-    \left( \frac{n}{k} \right)^k = \frac{n}{k} \cdot \ldots \cdot \frac{n}{k} \leq \frac{n}{k} \cdot \frac{n-1}{k-1} \cdot \ldots \cdot \frac{n-k+1}{1} = \binom{n}{k}.
-    $$
-    Now let us consider the upper bound.
-    Recall the expansion of $e^k$, $$e^k=\sum_{j=0}^{\infty}\frac{k^j}{j!}$$. Simply picking the $k+1$-th term only we get,
-    $$
-    e^k \ge \frac{k^k}{k!}
-    $$
-    which implies
-    $$
-    \frac{1}{k!} \le \left(\frac{e}{k}\right)^k
-    $$
-    Then observe that, 
-    $$
-    {n \choose k} = \frac{n!}{(n-k)! k!} = \frac{n \cdot (n-1) \dots (n-(k-1))}{k!} \le \frac{n^k}{k!} \le \left(\frac{en}{k}\right)^{k}
-    $$
-\end{proof}
-
-We will now use these bounds to find the desired expectation.
+Generalizing this without any further assumptions is quite hard as the expectation operator does not behave nicely with binomial coefficients as in lemma \ref{lemma:k-int-prob}. Instead we will make a reasonable assumption that will allow us to derive a reasonable lower bound for this expectation. 
 
 \begin{lemma}
-    \label{lemma:tail-expectation}
+    \label{lemma:expected-k-int-prob}
     Given a set $V$ with $n$ items and two subsets $U,W$ of respective sizes $r_u,r_w$, denote the size of the intersection between them by the random variable $Y$.
         If \begin{enumerate}
-            \item $r_u$, $r_w$ are random variables that follow distributions with expected value $r$,
-            \item $r_u, r_w \in [r-\delta, r+\delta]$ for some $\delta > 0$,
-            \item $n > 2r + \delta$ 
-            \item $Y \sim Hypergeometric(n, r_u, r_w)$,
+            \item $r_u, r_w \in [r-\delta, r+\delta]$ for some $r, \delta > 0$,
+            \item $n >> 2(r+\delta)$, 
         \end{enumerate}      
-then $$\mathbb{E} \left[ \bar{F}_Y\left(\left\lfloor \frac{r_w}{k} 
-\right\rfloor\right) \right] \ge \sum_{y = \left\lceil \frac{r-\delta}{k} \right\rceil}^{\left\lfloor r-\delta \right\rfloor}
-\frac
-{
-    \left(\frac{r}{y}\right)^{y} \left(\frac{n-r}{r + \delta - y}\right)^{r-\delta-y}
-}
-{
-    \left(\frac{en}{r}\right)^{r+\delta}
-} $$
+then $$ \bar{F}_Y\left(\left\lfloor \frac{r_w}{k} 
+\right\rfloor\right) \ge \sum_{y = \left\lceil \frac{r-\delta}{k} \right\rceil}^{\left\lfloor r - \delta \right\rfloor} \frac{\binom{r-\delta}{y} \binom{n-r-\delta}{r-\delta-y}}{\binom{n}{r+\delta}}$$
     \end{lemma}
-    \textit{Remark.} Before proceeding with the proof, we want to justify the assumptions made here. The first and fourth assumption are necesary as that is the context in which we think this result will be the most useful. The second assumption is simply bounding the subset size by a particular offset from $r$ that can be varied and smaller the value of $\delta$, the better the tighter the lower bound of the expectation will be. This is necessary to obtain a clean result in terms of $r$ only without involving the rnadom variables $r_w, r_u$ that are specific to particular subsets. The third assumption is simply saying that $n$ should be significantly bigger than $r$ which is often the case in our intended field of application \cite{valiant2005memorization}. We chose to go with a tight inequality instead of a more general statement like $n >> r$ in order to make the result as strong as possible. This is also necessary for a critical step in the proof.
+    \textit{Remark.} Before proceeding with the proof, we want to justify the second assumption made here. It is a known fact that bounding binomial coefficients above or below is hard due to the nature of how it varies with respect to the second argument. We know that $n \choose k$ reaches its maximum value at $\left\lceil \frac{n}{2} \right\rceil$ or $\left\lfloor \frac{n}{2} \right\rfloor$ and it is monotonically increasing at smaller values and decreasing at larger values. My making the assumption here we can ensure that our second argument is always a lot smaller than this maxima, and as such an increase in the second argument will only increase the value of the expression. This assumption is reasonable since models like the Neuroidal Model expect the memory sizes to be significantly smaller than the size of the model \cite{valiant2005memorization}. Also note that the binomial coefficient increases monotonically with respect to the first argument. 
     \begin{proof}  
         First note that $n > r_u, r_w$ and by extension $n > r$ since the size of a subset cannot exceed the size of the set.  
         Then observe that 
         \begin{equation}
             \begin{split}
-                \mathbb{E} \left[\bar{F}_Y\left(\left\lfloor \frac{r_w}{k} \right\rfloor\right) \right] 
+                \bar{F}_Y\left(\left\lfloor \frac{r_w}{k} \right\rfloor\right)  
                 &=
-                \mathbb{E} \left[ \sum_{y = \left\lceil \frac{r_w}{k} \right\rceil}^{r_w} \mathbb{P}(Y=y) \right] 
-                \\[2em] &= \mathbb{E}  \left[ \sum_{y = \left\lceil \frac{r_w}{k} \right\rceil}^{r_w} \frac{\binom{r_u}{y} \binom{n-r_u}{r_w-y}}{\binom{n}{r_w}} \right] 
-                \\[2em] &=  \sum_{y = \left\lceil \frac{r_w}{k} \right\rceil}^{r_w} \mathbb{E} \left[\frac{\binom{r_u}{y} \binom{n-r_u}{r_w-y}}{\binom{n}{r_w}}  \right] 
-                \\[2em] &\ge \sum_{y = \left\lceil \frac{r_w}{k} \right\rceil}^{r_w} \mathbb{E} 
-                \left[
-                    \frac
-                    {
-                        \left(\frac{r_u}{y}\right)^{y} \left(\frac{n-r_u}{r_w - y}\right)^{r_w-y}
-                    }
-                    {
-                        \left(\frac{en}{r_w}\right)^{r_w}
-                    }  
-                \right] 
-                \\[2em] &= 
-                \sum_{y = \left\lceil \frac{r_w}{k} \right\rceil}^{r_w}
-                    \frac
-                    {
-                        \left(\frac{r}{y}\right)^{y} \left(\frac{n-r}{r - y}\right)^{r_w-y}
-                    }
-                    {
-                        \left(\frac{en}{r}\right)^{r_w}
-                    } 
-                \\[2em] &\ge 
-                    \sum_{y = \left\lceil \frac{r_w}{k} \right\rceil}^{r_w}
-                        \frac
-                        {
-                            \left(\frac{r}{y}\right)^{y} \left(\frac{n-r}{r + \delta - y}\right)^{r_w-y}
-                        }
-                        {
-                            \left(\frac{en}{r}\right)^{r_w}
-                        } 
-                \\[2em] &\ge 
-                        \sum_{y = \left\lceil \frac{r-\delta}{k} \right\rceil}^{\left\lfloor r-\delta \right\rfloor}
-                            \frac
-                            {
-                                \left(\frac{r}{y}\right)^{y} \left(\frac{n-r}{r + \delta - y}\right)^{r_w-y}
-                            }
-                            {
-                                \left(\frac{en}{r}\right)^{r_w}
-                            }
-                \\[2em] &\ge 
-                            \sum_{y = \left\lceil \frac{r-\delta}{k} \right\rceil}^{\left\lfloor r-\delta \right\rfloor}
-                                \frac
-                                {
-                                    \left(\frac{r}{y}\right)^{y} \left(\frac{n-r}{r + \delta - y}\right)^{r-\delta-y}
-                                }
-                                {
-                                    \left(\frac{en}{r}\right)^{r+\delta}
-                                } 
+                 \sum_{y = \left\lceil \frac{r_w}{k} \right\rceil}^{r_w} \mathbb{P}(Y=y)  
+                \\[2em] &=    \sum_{y = \left\lceil \frac{r_w}{k} \right\rceil}^{r_w} \frac{\binom{r_u}{y} \binom{n-r_u}{r_w-y}}{\binom{n}{r_w}} 
+                \\[2em] &\ge  \sum_{y = \left\lceil \frac{r_w}{k} \right\rceil}^{r_w} \frac{\binom{r-\delta}{y} \binom{n-r-\delta}{r-\delta-y}}{\binom{n}{r+\delta}}  
+                \\[2em] &\ge  \sum_{y = \left\lceil \frac{r-\delta}{k} \right\rceil}^{\left\lfloor r - \delta \right\rfloor} \frac{\binom{r-\delta}{y} \binom{n-r-\delta}{r-\delta-y}}{\binom{n}{r+\delta}}  
             \end{split}
         \end{equation}
-        The first and second equalities follow from the definition of the tail distribution and PMF of the hypergeometric distribution respectively. The third equality follows from the linearity of the expectation operator. The fourth inequality follows from applying the lower bound and upper bound we established in lemma \ref{lemma:binomial-lower-bound} to the numerator and demonimation respectively as well as the fact that the expectation operator preservers order. The fifth equality follows from the expectation operator preserving multiplication. The sixth inequality follows since increasing the denominator slightly results in a smaller value. The seventh inequality follows from the second assumption and since all the terms in the expression are positive and reducing the number of terms we sum over will reduce the total value. Note that even though going from $\left\lceil \frac{r_w}{k} \right\rceil$ to $\left\lceil \frac{r-\delta}{k} \right\rceil$ might add a few more terms, it will always be less than the terms removed by switching the upper limit from $r_w$ to $\lfloor r-\delta \rfloor$. The eighth inequality follows from the second and third assumptions, since $n > 2r + \delta \implies n > 2r + \delta - y \implies n - r > r + \delta - y$ and $n > 2r + \delta \implies en > r$ so both the terms are positive and we can replace $r_w$ with its lower and upper bound respectively. 
+        The first and second equalities follow from the definition of the tail distribution and lemma \ref{lemma:k-int-prob} respectively. The second inequality follows from assumption 1. in the theorem and the behavior of the binomial coefficient under varying arguments. The final inequality follows from the fact that since all terms in the sum are positive, reducing the number of terms will make the overall expression smaller. Note that while reducing the lower limit from $\left\lceil \frac{r_w}{k} \right\rceil$ to $\left\lceil \frac{r-\delta}{k} \right\rceil$ might lead to addition of more terms, it will always be less than the number of terms removed due to changing the upper limit from $r_w$ to $r-\delta$.
+        
     \end{proof}
 
     \section{Capacity}
-    With the above lemmas in our arsenal we can now move on  the main subject of this thesis. 
+    With the above lemmas in our arsenal we can now move on  the main subject of this thesis. We now formally define the capacity of a system of overlapping subsets with interference being the limiting factor. 
+
+    \begin{definition} (\textbf{(\textit{$r,T,k,\delta$})-Subset Capacity}) Given a set $V = \{v_1,...,v_n\}$, and parameters $r, T, k, \delta > 0$, the \textit{$(r,T,k,\delta)$-subset capacity} of $V$ is the \textit{maximum} number of subsets that can be picked subject to the conditions that any randomly picked subset $U$,
+        \begin{enumerate}
+            \item $r' \in [r-\delta,r+\delta]$,
+            \item $n >> 2(r+\delta)$,
+            \item \label{equ:cap-bound-expected}$E[X_U] \le T$ where $X_U$ is a random variable denoting the number of interferences caused due to picking $U$. 
+        \end{enumerate}
+    \end{definition}
+
+    We need the second restriction on the memories here since we want to apply lemma \ref{lemma:expected-k-int-prob} to every pair. The third restriction here can be thought of as a stopping criteria as we stop picking the subsets once the expectation of interference reaches that threshold. In the context of models in computational neuroscience like the Neuroidal Model, this means that there will be too impact on the quality of memorization, that is too much noise and misfiring in the system if we add any further memories.
+    
+    Before deriving the capacity for the general case, let us consider the simpler case where all memories have the exact same size. This is valuable since it results in a much simpler expression and we can use this as an approximation for the more general case too. However note that we realize that this scenario is not biologically plausible at all. 
+
+    \begin{theorem}
+        \label{thm:exact-r}
+        Given a set $V$ with $n$ items and the property that every picked subset will have size exactly $r$, the $(r,T,k,\delta)$-subset capacity of $V$ is 
+        \begin{equation*}
+            \left\lfloor \frac{T}{\bar{F}_Y\left(\left\lfloor \frac{r}{k} \right\rfloor\right)} + 1 \right\rfloor.
+        \end{equation*}
+    \end{theorem}
+
+    \textit{Remark.} Since all subsets have fixed size $r$, note that the choice of $\delta$ is not relevant here.
+
+    \begin{proof}[Proof 1.]
+         Suppose we have already have $M-1$ subsets in the universe. Pick a random subset $U$. From lemma \ref{lemma:k-int-prob}, we know that the expected number of $k$-interferences of $U$  with another arbitrary subset $W$ from the universe is $\bar{F}_Y\left(\left\lfloor \frac{r}{k} \right\rfloor\right)$. Since there are $M-1$ other subsets, the total expected number of $k$-interferences caused by picking $U$ is $(M-1) \bar{F}_Y\left(\left\lfloor \frac{r}{k} \right\rfloor\right)$.
+
+        From inequality \ref{equ:cap-bound-expected} in the definition of capacity, we have 
+        
+            \begin{equation}
+            \label{equ:cap-exact-r}
+                (M-1) \bar{F}_Y\left(\left\lfloor \frac{r}{k} \right\rfloor\right) \le T \implies M \le \frac{T}{\bar{F}_Y\left(\left\lfloor \frac{r}{k} \right\rfloor\right)} + 1.
+            \end{equation}
+            The $(r,T,k,\delta)$-subset capacity of $V$ then is the largest integer $M$ that satisfies inequality \ref{equ:cap-exact-r}.
+    \end{proof}
+
+    We provide an alternate proof that, while less elegant, can be scaled to prove the general statement. 
+
+    \begin{proof}[Proof 2.]
+        Suppose we have already have $M$ subsets in the universe. Pick two subsets $U,W$ without replacement. From lemma \ref{lemma:k-int-prob}, we know that the expected number of $k$-interferences of $U$ with $W$ is $\bar{F}_Y\left(\left\lfloor \frac{r}{k} \right\rfloor\right)$. Since we know all subsets have the same size, the expected number of $k$-interferences of $W$ with $U$ is the same. So the expected number of interferences caused by one pair is
+    $$
+    2\bar{F}_Y\left(\left\lfloor \frac{r}{k} \right\rfloor\right).
+    $$
+    We know that there are $\binom{M}{2} = M(M-1)/2$ such pairs so the expected number of total interferences is
+    $$
+    2 \cdot \frac{M(M-1)}{2} \bar{F}_Y\left(\left\lfloor \frac{r}{k} \right\rfloor\right)  =  M(M-1) \bar{F}_Y\left(\left\lfloor \frac{r}{k} \right\rfloor\right). 
+    $$
+    Since there are $M$ subsets, the expected number of interferences by choosing picking one subset is
+    $$
+    \frac{M(M-1)}{M} \bar{F}_Y\left(\left\lfloor \frac{r}{k} \right\rfloor\right))  = (M-1) \bar{F}_Y\left(\left\lfloor \frac{r}{k} \right\rfloor\right).
+    $$
+    From inequality \ref{equ:cap-bound-expected}, we have 
+
+    \begin{equation}
+        \label{equ:cap-exact-r-2}
+        (M-1) \bar{F}_Y\left(\left\lfloor \frac{r}{k} \right\rfloor\right) \le T \implies M \le \frac{T}{\bar{F}_Y\left(\left\lfloor \frac{r}{k} \right\rfloor\right)} + 1.
+    \end{equation}
+The $(r,T,k,\delta)$-subset capacity of $V$ is the largest integer $M$ that satisfies inequality \ref{equ:cap-exact-r-2}.
+    \end{proof}
+
+We will now tackle the general case using the same strategy as above. 
+
+\begin{theorem}
+    Given a set $V$ with $n$ items, the $(r,T,k,\delta)$-subset capacity of $V$ is bounded above by
+    \begin{equation*}
+     \frac{T}{\sum_{y = \left\lceil \frac{r-\delta}{k} \right\rceil}^{\left\lfloor r - \delta \right\rfloor} \frac{\binom{r-\delta}{y} \binom{n-r-\delta}{r-\delta-y}}{\binom{n}{r+\delta}}} + 1
+    \end{equation*}
+\end{theorem}
+
+\textit{Remark.} Note that we can only say it is bounded above and not the exact capacity as defined since we have to use lemma \ref{lemma:expected-k-int-prob}. However as $\delta \to 0$, this expression converges to the expression in theorem \ref{thm:exact-r}. 
+
+\begin{proof}
+
+    Suppose we have $M$ subsets $U_1,...,U_M$ with sizes $r_1,...,r_M$. Pick two subsets $U_i,U_j$. From lemma \ref{lemma:k-int-prob}, we know that the expected number of interferences caused by this pair is
+    $$
+    \bar{F}_Y\left(\left\lfloor \frac{r_j}{k} \right\rfloor\right) + \bar{F}_Y\left(\left\lfloor \frac{r_i}{k} \right\rfloor\right).
+    $$
+    We then sum over all possible pairings to get the expected number of total interferences:
+    $$
+    \sum_{(i,j) \in \Z\times\Z, 1 \le i,j \le M, i \ne j} \Biggl( \bar{F}_Y\left(\left\lfloor \frac{r_j}{k} \right\rfloor\right) + \bar{F}_Y\left(\left\lfloor \frac{r_i}{k} \right\rfloor\right) \Biggr).
+    $$
+
+\noindent Since there are $M$ subsets, the expected number of interferences by picking one subset is
+    $$
+    \frac{1}{M} \sum_{(i,j) \in \Z\times\Z, 1 \le i,j \le M, i \ne j}  \Biggl( \bar{F}_Y\left(\left\lfloor \frac{r_j}{k} \right\rfloor\right) + \bar{F}_Y\left(\left\lfloor \frac{r_i}{k} \right\rfloor\right) \Biggr).
+    $$
+
+\noindent From inequality \ref{equ:cap-bound-expected}, we have 
+
+\begin{equation*}
+      \frac{1}{M} \sum_{(i,j) \in \Z\times\Z, 1 \le i,j \le M, i \ne j}  \Biggl( \bar{F}_Y\left(\left\lfloor \frac{r_j}{k} \right\rfloor\right) + \bar{F}_Y\left(\left\lfloor \frac{r_i}{k} \right\rfloor\right) \Biggr)  \le T,
+\end{equation*}
+\noindent which implies
+\begin{equation}
+\label{equ:cap-r}      
+       M \geq \frac{1}{T}\sum_{(i,j) \in \Z\times\Z, 1 \le i,j \le M, i \ne j}  \Biggl( \bar{F}_Y\left(\left\lfloor \frac{r_j}{k} \right\rfloor\right) + \bar{F}_Y\left(\left\lfloor \frac{r_i}{k} \right\rfloor\right)\Biggr). 
+\end{equation}
+Using lemma \ref{lemma:expected-k-int-prob} we get
+\begin{equation}
+\label{equ:cap-r-2}
+    \begin{split}
+           M = &\ge
+           \frac{1}{T}\sum_{(i,j) \in \Z\times\Z, 1 \le i,j \le M, i \ne j}  \Biggl( 2 \sum_{y = \left\lceil \frac{r-\delta}{k} \right\rceil}^{\left\lfloor r - \delta \right\rfloor} \frac{\binom{r-\delta}{y} \binom{n-r-\delta}{r-\delta-y}}{\binom{n}{r+\delta}}\Biggr) \\
+           &=\frac{1}{T} \frac{M(M-1)}{2} \Biggl( 2 \sum_{y = \left\lceil \frac{r-\delta}{k} \right\rceil}^{\left\lfloor r - \delta \right\rfloor} \frac{\binom{r-\delta}{y} \binom{n-r-\delta}{r-\delta-y}}{\binom{n}{r+\delta}}\Biggr),
+    \end{split}
+    \end{equation} \\
+\noindent which implies 
+\begin{equation}
+    \label{equ:cap-r-bounded}     
+    M \le \frac{T}{\sum_{y = \left\lceil \frac{r-\delta}{k} \right\rceil}^{\left\lfloor r - \delta \right\rfloor} \frac{\binom{r-\delta}{y} \binom{n-r-\delta}{r-\delta-y}}{\binom{n}{r+\delta}}} + 1.
+\end{equation}
+The expected $(r,T,k,\delta)$-subset capacity of $V$ should be bounded above by this expression and the tightness of the bound will depend on the parameter $\delta$. 
+\end{proof}
+
+\section{Empirical Results}
+
+
+
 
 
 
