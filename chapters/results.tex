@@ -217,10 +217,34 @@ We compare the average capacity of the simulation with the analytical result fro
         \label{figure:cap-vs-r}
         \end{figure}
 
-Then we the compare the average capacity of the simulation with the analytical result from Theorem \ref{thm:exact-r} as a function of the size of the subsets $r$. We fix $n=100$, $k=2$, $T=0.1$. Figure \ref{figure:cap-vs-r} shows the results of this comparison. We see that the average simulated capacity is very close to the analytical capacity thoughout our input range and follows the general trend, even following the sharp decreases while going from odd numbers to even numbers. This is because the sets need intersections of size atleast $\lceil r/2 \rceil$ to interfere and as the size of the subset goes from an odd number to the next even number, this value remains the same while the size of the subsets increase leading to a higher probability of interference and lower capacity. One can also think of it as more terms being included in the sum in Lemma \ref{lemma:k-int-prob}.
+    \begin{figure}%[h]
+            \centering
+            \includegraphics[scale=0.85]{figures/larger-n.png}
+            \caption[Capacity vs. Size of the subsets for n = 500]{How capacity is affected by increasing the size of the subsets when n = 500.}
+            \label{figure:larger-n}
+            \end{figure}
+
+Then we the compare the average capacity of the simulation with the analytical result from Theorem \ref{thm:exact-r} as a function of the size of the subsets $r$. We fix $n=100$, $k=2$, $T=0.1$. Figure \ref{figure:cap-vs-r} shows the results of this comparison. We see that the average simulated capacity is very close to the analytical capacity thoughout our input range and follows the general trend, even following the sharp decreases while going from odd numbers to even numbers. This is because the sets need intersections of size atleast $\lceil r/2 \rceil$ to interfere and as the size of the subset goes from an odd number to the next even number, this value remains the same while the size of the subsets increase leading to a higher probability of interference and lower capacity. One can also think of it as more terms being included in the sum in Lemma \ref{lemma:k-int-prob}. We believe these peaks will reduce in intensity relative to the scale of the y axis as $n \to \infty$. Figure \ref{figure:larger-n} shows the values of analytical capacity with same configuration as above but with n set to 500. We can already see that the graph has become a lot smoother. Unfortunately, it is impossible for us to simulate models of this size or bigger due to memory constraints. 
 
 \subsection{Bounded subset size}
 Now we simulate the case where the subset sizes are not fixed but rather bounded above and below. 
+
+
+\begin{figure}%[h]
+    \centering
+    \includegraphics[scale=0.85]{figures/cap-vs-r-bounded.png}
+    \caption[Capacity vs. Size of the subsets]{How capacity is affected by increasing the size of the subsets when r bounded by 2}
+    \label{figure:cap-vs-r-bounded}
+    \end{figure}
+
+\begin{figure}%[h]
+        \centering
+        \includegraphics[scale=0.82]{figures/cap-vs-n-bounded.png}
+        \caption[Capacity vs. Size of the subsets]{How capacity is affected by increasing the size of the subsets when r bounded by 2}
+        \label{figure:cap-vs-n-bounded}
+        \end{figure}
+
+Like in the fixed case, we compare the simulated and analytical capacities against the size of the set and against the size of the subsets. For the comarison against size of the set, we set $r = 20$ and for the comparison against size of the subsets, we set $n = 100$. For both cases we fix $k=2, T=0.1$ and draw the $r$ values randomly from $\mathcal{N}(r,1)$ followed by conversion to integer. Based on the Empirical Law, we except $95\%$ of the values to lie within two standard deviations of $r$, so we choose $\delta = 2$. Figures \ref{figure:cap-vs-n-bounded} and \ref{figure:cap-vs-r-bounded} show the results of these experiments. We see that even thought the analytical bound from equation \ref{equ:cap-bound-expected} bounds the simulated capacity, the bound is very loose and does cannot be used as an approximation. We believe this is because of how the binomial coefficient varies with respect to its second parameter and that $\delta$ here, even though only $2$ is quite big with respect to $r$, and is reducing the second argument significantly in the term $n - r - \delta \choose r - \delta - y$. We believe that a larger $n$ and $r$ will make this bound tighter and applications like the Neuroidal model indeed use values of $n$ and $r$ that are orders of magnitudes larger. However, it is not feasible for us to simulate at such scale. We experimented with removing the $-\delta$ in $n - r - \delta \choose r - \delta - y$ and yielded much better results for the graph for capacity vs subset size. Further, we also compared the analytical results from equation \ref{equ:cap-exact-r} and it was still a good approximation for the simulation with randomly drawn r's. 
 
 
 \section{Discussion}
