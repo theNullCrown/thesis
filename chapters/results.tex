@@ -232,18 +232,32 @@ Now we simulate the case where the subset sizes are not fixed but rather bounded
 \begin{figure}%[h]
     \centering
     \includegraphics[scale=0.82]{figures/cap-vs-n-bounded.png}
-    \caption[Capacity vs. Size of the set ($n$)]{How capacity is affected by increasing the size of the subsets ($r$) when $r$ is drawn from a normal distribution with mean $r$ and standard deviation $2$}
+    \caption[Capacity vs. Size of the set ($n$)]{How capacity is affected by increasing the size of the subsets ($r$) when $r$ is drawn from a normal distribution with mean $r$ and standard deviation $1$}
     \label{figure:cap-vs-n-bounded}
     \end{figure}
 
 \begin{figure}%[h]
     \centering
-    \includegraphics[scale=0.85]{figures/cap-vs-r-bounded.png}
-    \caption[Capacity vs. Size of the subsets ($r$)]{How capacity is affected by increasing the size of the subsets ($r$) when $r$ is drawn from a normal distribution with mean $r$ and standard deviation $2$}
+    \includegraphics[scale=0.83]{figures/cap-vs-r-bounded.png}
+    \caption[Capacity vs. Size of the subsets ($r$)]{How capacity is affected by increasing the size of the subsets ($r$) when $r$ is drawn from a normal distribution with mean $r$ and standard deviation $1$}
     \label{figure:cap-vs-r-bounded}
     \end{figure}
 
-Like in the fixed case, we compare the simulated and analytical capacities against the size of the set and against the size of the subsets. For the comarison against size of the set, we set $r = 20$ and for the comparison against size of the subsets, we set $n = 100$. For both cases we fix $k=2, T=0.1$ and draw the $r$ values randomly from $\mathcal{N}(r,1)$ followed by conversion to integer. Based on the Empirical Law, we except $95\%$ of the values to lie within two standard deviations of $r$, so we choose $\delta = 2$. Figures \ref{figure:cap-vs-n-bounded} and \ref{figure:cap-vs-r-bounded} show the results of these experiments. We see that even thought the analytical bound from equation \ref{equ:cap-bound-expected} bounds the simulated capacity, the bound is very loose and does cannot be used as an approximation. We believe this is because of how the binomial coefficient varies with respect to its second parameter and that $\delta$ here, even though only $2$ is quite big with respect to $r$, and is reducing the second argument significantly in the term $n - r - \delta \choose r - \delta - y$. We believe that a larger $n$ and $r$ will make this bound tighter and applications like the Neuroidal model indeed use values of $n$ and $r$ that are orders of magnitudes larger. However, it is not feasible for us to simulate at such scale. We experimented with removing the $-\delta$ in $n - r - \delta \choose r - \delta - y$ and yielded much better results for the graph for capacity vs subset size. Further, we also compared the analytical results from equation \ref{equ:cap-exact-r} and it was still a good approximation for the simulation with randomly drawn r's. 
+    \begin{figure}%[h]
+        \centering
+        \includegraphics[scale=0.83]{figures/cap-vs-r-bounded-exact-1.png}
+        \caption[Capacity vs. Size of the subsets ($r$)]{How capacity is affected by increasing the size of the subsets ($r$) comparing the results of \ref{equ:cap-exact-r} with the simulation where $r$ is drawn from a normal distribution with mean $r$ and standard deviation $1$}
+        \label{figure:cap-vs-r-bounded-exact-1}
+        \end{figure}
+
+        \begin{figure}%[h]
+            \centering
+            \includegraphics[scale=0.83]{figures/cap-vs-r-bounded-exact-2.png}
+            \caption[Capacity vs. Size of the subsets ($r$)]{How capacity is affected by increasing the size of the subsets ($r$) comparing the results of \ref{equ:cap-exact-r} with the simulation where $r$ is drawn from a normal distribution with mean $r$ and standard deviation $2$}
+            \label{figure:cap-vs-r-bounded-exact-2}
+            \end{figure}
+
+Like in the fixed case, we compare the simulated and analytical capacities against the size of the set and against the size of the subsets. For the comarison against size of the set, we set $r = 20$ and for the comparison against size of the subsets, we set $n = 100$. For both cases we fix $k=2, T=0.1$ and draw the $r$ values randomly from $\mathcal{N}(r,1)$ followed by conversion to integer. Based on the Empirical Law, we except $95\%$ of the values to lie within two standard deviations of $r$, so we choose $\delta = 2$. Figures \ref{figure:cap-vs-n-bounded} and \ref{figure:cap-vs-r-bounded} show the results of these experiments. We see that even thought the analytical bound from equation \ref{equ:cap-bound-expected} bounds the simulated capacity, the bound is very loose and does cannot be used as an approximation. We believe this is because of how the binomial coefficient varies with respect to its second parameter and that $\delta$ here, even though only $2$ is quite big with respect to $r$, and is reducing the second argument significantly in the term $n - r - \delta \choose r - \delta - y$. We believe that a larger $n$ and $r$ will make this bound tighter and applications like the Neuroidal model indeed use values of $n$ and $r$ that are orders of magnitudes larger. However, it is not feasible for us to simulate at such scale. We also compared the analytical results from equation \ref{equ:cap-exact-r} and it was still a good approximation for the simulation with randomly drawn r's. Figures \ref{figure:cap-vs-r-bounded-exact-1} and \ref{figure:cap-vs-r-bounded-exact-2} show the results of these simulations. As expected the simulated capacity is a lot closer to the analytical capacity when the standard deviation is low. 
 
 
 \section{Discussion}
