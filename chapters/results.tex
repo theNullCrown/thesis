@@ -233,28 +233,28 @@ Now we simulate the case where the subset sizes are not fixed but rather bounded
 \begin{figure}%[h]
     \centering
     \includegraphics[scale=0.82]{figures/cap-vs-n-bounded.png}
-    \caption[Capacity vs. Size of the set ($n$)]{How capacity is affected by increasing the size of the subsets ($r$) when $r$ is drawn from a normal distribution with mean $r$ and standard deviation $1$}
+    \caption[Capacity vs. Size of the set ($n$) when $r \sim \mathcal{N}(r,1)$ ]{How capacity is affected by increasing the size of the subsets ($r$) when $r$ is drawn from a normal distribution with mean $r$ and standard deviation $1$}
     \label{figure:cap-vs-n-bounded}
     \end{figure}
 
 \begin{figure}%[h]
     \centering
     \includegraphics[scale=0.83]{figures/cap-vs-r-bounded.png}
-    \caption[Capacity vs. Size of the subsets ($r$)]{How capacity is affected by increasing the size of the subsets ($r$) when $r$ is drawn from a normal distribution with mean $r$ and standard deviation $1$}
+    \caption[Capacity vs. Size of the subsets ($r$) when $r \sim \mathcal{N}(r,1)$ ]{How capacity is affected by increasing the size of the subsets ($r$) when $r$ is drawn from a normal distribution with mean $r$ and standard deviation $1$}
     \label{figure:cap-vs-r-bounded}
     \end{figure}
 
     \begin{figure}%[h]
         \centering
         \includegraphics[scale=0.83]{figures/cap-vs-r-bounded-exact-1.png}
-        \caption[Capacity vs. Size of the subsets ($r$)]{How capacity is affected by increasing the size of the subsets ($r$) comparing the results of \ref{equ:cap-exact-r} with the simulation where $r$ is drawn from a normal distribution with mean $r$ and standard deviation $1$}
+        \caption[Capacity vs. Size of the subsets ($r$) when $r \sim \mathcal{N}(r,1)$ comparing exact formula vs simulation]{How capacity is affected by increasing the size of the subsets ($r$) comparing the results of \ref{equ:cap-exact-r} with the simulation where $r$ is drawn from a normal distribution with mean $r$ and standard deviation $1$}
         \label{figure:cap-vs-r-bounded-exact-1}
         \end{figure}
 
         \begin{figure}%[h]
             \centering
             \includegraphics[scale=0.83]{figures/cap-vs-r-bounded-exact-2.png}
-            \caption[Capacity vs. Size of the subsets ($r$)]{How capacity is affected by increasing the size of the subsets ($r$) comparing the results of \ref{equ:cap-exact-r} with the simulation where $r$ is drawn from a normal distribution with mean $r$ and standard deviation $2$}
+            \caption[Capacity vs. Size of the subsets ($r$) when $r \sim \mathcal{N}(r,2)$]{How capacity is affected by increasing the size of the subsets ($r$) comparing the results of \ref{equ:cap-exact-r} with the simulation where $r$ is drawn from a normal distribution with mean $r$ and standard deviation $2$}
             \label{figure:cap-vs-r-bounded-exact-2}
             \end{figure}
 
@@ -281,56 +281,56 @@ Our equation produces a capacity of 3203070686178 while the Neuroidal model simu
     \begin{figure}%[h]
         \centering
         \includegraphics[scale=0.3]{graph_1200_memories.png}
-        \caption{Neuroidal model (n=500, d=128, w=16, r=40) at 1200 memories. Node value indicates number of interferences that occured at each node.}
+        \caption[Interference accumulation per node of Neuroidal model at 1200 memories]{Neuroidal model (n=500, d=128, w=16, r=40) at 1200 memories. Node value indicates number of interferences that occured at each node.}
         \label{fig:sub1}
     \end{figure}
 
     \begin{figure}%[h]
         \centering
         \includegraphics[scale=0.3]{graph_1400_memories.png}
-        \caption{Neuroidal model (n=500, d=128, w=16, r=40) at 1400 memories. Node value indicates number of interferences that occured at each node.}
+        \caption[Interference accumulation per node of Neuroidal model at 1400 memories]{Neuroidal model (n=500, d=128, w=16, r=40) at 1400 memories. Node value indicates number of interferences that occured at each node.}
         \label{fig:sub2}
     \end{figure}
 
     \begin{figure}%[h]
         \centering
         \includegraphics[scale=0.3]{graph_1600_memories.png}
-        \caption{Neuroidal model (n=500, d=128, w=16, r=40) at 1600 memories. Node value indicates number of interferences that occured at each node.}
+        \caption[Interference accumulation per node of Neuroidal model at 1600 memories]{Neuroidal model (n=500, d=128, w=16, r=40) at 1600 memories. Node value indicates number of interferences that occured at each node.}
         \label{fig:sub3}
     \end{figure}
     
     \begin{figure}%[h]
         \centering
         \includegraphics[scale=0.3]{graph_final_memories.png}
-        \caption{Neuroidal model (n=500, d=128, w=16, r=40) at capacity (1800 memories). Node value indicates number of interferences that occured at each node.}
+        \caption[Interference accumulation per node of Neuroidal model at capacity]{Neuroidal model (n=500, d=128, w=16, r=40) at capacity (1800 memories). Node value indicates number of interferences that occured at each node.}
         \label{fig:sub4}
     \end{figure}
 
     \begin{figure}%[h]
         \centering
         \includegraphics[scale=0.3]{graph_1200_n_memories.png}
-        \caption{Neuroidal model (n=500, d=128, w=16, r=40) at 1200 memories. Node value indicates memory membership of the node.}
+        \caption[Memory membership per node of Neuroidal model at 1200 memories]{Neuroidal model (n=500, d=128, w=16, r=40) at 1200 memories. Node value indicates memory membership of the node.}
         \label{fig:subn1}
     \end{figure}
 
     \begin{figure}%[h]
         \centering
         \includegraphics[scale=0.3]{graph_1400_n_memories.png}
-        \caption{Neuroidal model (n=500, d=128, w=16, r=40) at 1400 memories. Node value indicates memory membership of the node.}
+        \caption[Memory membership per node of Neuroidal model at 1400 memories]{Neuroidal model (n=500, d=128, w=16, r=40) at 1400 memories. Node value indicates memory membership of the node.}
         \label{fig:subn2}
     \end{figure}
 
     \begin{figure}%[h]
         \centering
         \includegraphics[scale=0.3]{graph_1600_n_memories.png}
-        \caption{Neuroidal model (n=500, d=128, w=16, r=40) at 1600 memories. Node value indicates memory membership of the node.}
+        \caption[Memory membership per node of Neuroidal model at 1600 memories]{Neuroidal model (n=500, d=128, w=16, r=40) at 1600 memories. Node value indicates memory membership of the node.}
         \label{fig:subn3}
     \end{figure}
     
     \begin{figure}%[h]
         \centering
         \includegraphics[scale=0.3]{graph_final_n_memories.png}
-        \caption{Neuroidal model (n=500, d=128, w=16, r=40) at capacity (1800 memories). Node value indicates memory membership of the node}
+        \caption[Memory membership per node of Neuroidal model at capacity]{Neuroidal model (n=500, d=128, w=16, r=40) at capacity (1800 memories). Node value indicates memory membership of the node}
         \label{fig:subn4}
     \end{figure}
 
