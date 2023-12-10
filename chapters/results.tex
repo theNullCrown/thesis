@@ -262,21 +262,87 @@ Like in the fixed case, we compare the simulated and analytical capacities again
 
 \subsection{Application to Other Models}
 
-We believe our theoretical framework for interference and capacity calculations can be extended to analyze and understand the behavior of graph-based models with more complex memory creation algorithms. The primary distinction between our simple model and more complicated models like the Neuroidal model and Assembly Caculus is with regards to the memory creation algorithm. We implicitly assume a random memory creation algorithm in lemma \ref{lemma:k-int-prob} while the Neuroidal model and Asssembly Calculus use the JOIN and Project memory creation algorithms respectively. Since no other part of our theory makes any assumption about the process of memory formation, we believe that adjusting the calculation of expected interference between two memories in lemma \ref{lemma:k-int-prob} to incorporate the nuances of other memory creation algorithms and using it appropriately in Theorem \ref{thm:exact-r} or \ref{thm:bounded-r} will give us an accurate representation of capacity in those models.
+We believe our theoretical framework for interference and capacity calculations can be extended to analyze and understand the behavior of graph-based models with more complex memory creation algorithms. The primary distinction between our simple model and more complicated models like the Neuroidal model and Assembly Caculus is with regards to the memory creation algorithm. We implicitly assume a random memory creation algorithm in lemma \ref{lemma:k-int-prob} while the Neuroidal model and Asssembly Calculus use the JOIN and Project memory creation algorithms respectively \cite{papadimitriou2020brain} \cite{valiant2005memorization}. Since no other part of our theory makes any assumption about the process of memory formation, we believe that adjusting the calculation of expected interference between two memories in lemma \ref{lemma:k-int-prob} to incorporate the nuances of other memory creation algorithms and using it appropriately in Theorem \ref{thm:exact-r} or \ref{thm:bounded-r} will give us an accurate representation of capacity in those models.
 
 We maintain the generality of our interference calculation while allowing for variations in memory creation algorithms. Specifically, we can refine the lemma to account for the JOIN and Project operations, ensuring that our interference metric aligns with the unique characteristics of each model. This adaptability enables the application of our interference and capacity framework to a broader class of graph-based models in computational neuroscience.
 
 The flexibility of our theoretical approach allows researchers to tailor interference calculations based on the specifics of memory creation algorithms in diverse neural network models. As a result, our capacity analysis can provide valuable insights into the limitations and efficiency of these models, enhancing our understanding of their memory storage capabilities.
 
+\subsection{Capacity and JOIN}
+
+In this section, we briefly discuss some insights we gained from our analysis of the JOIN operation with regards to capacity. 
+
+The JOIN algorithm is unique in the sense that it must follow a set of 6 basic constraints which ensure that the newly formed memories are roughly the same size as the memories that were JOINed and therefore the size of the memories ($r$) remains more or less fixed for a given graph size ($n$), expected degree ($d$) and edge weight $(w)$. Note that edge degree and synaptic weight were not a factor in our theory as edges do not matter when memories are randomly inserted. However, we believe that an updated JOIN-compliant formula expected interference between two memories will involve these paramters. 
+
+First, we compare our results from equation \ref{equ:cap-bound-expected} with results from our simulation of the Neuroidal Model. Valiant calculated the memory sizes for various parameter combinations, however the minimum graph size he considered was 100,000. Our simulation of the Neuroidal model cannot be scaled up that far so we use $n = 500, d = 128, w = 16$. We used patterns found in his results to estimate that $r = 40$ would be the appropriate value for this configuration. We start with 100 randomly generated memories which have negligible interference between them, essentially agreeing with our results from Theorem \ref{thm:bounded-r}. We observed that newly formed memories had sizes around $40$, validating that we are compliant with Valiant's definition of JOIN. Finally, we set the interference threshold $T = 0.1$ and interference parameter $k = 2$ as that is the only value of $k$ supported by the Neuroidal model. 
+
+Our equation produces a capacity of 3203070686178 while the Neuroidal model simulation only reaches around 250 memories over 20 runs before stopping due to excess interference. Therefore our equation in its current form cannot serve as a good approximation for the Neuroidal model's capacity however it is effectively an upper bound on most models like these as the memory formation is not capacity optimized which we think makes sense biologically. We believe random memory generation is quite good for capacity and memory formation algorithms that are even further optimized for capacity will be even more biologically implausible. As described in section 5.2.3, the theory will need to be updated to account for JOIN's behavior. 
+
+    \begin{figure}%[h]
+        \centering
+        \includegraphics[scale=0.3]{graph_1200_memories.png}
+        \caption{Neuroidal model (n=500, d=128, w=16, r=40) at 1200 memories. Node value indicates number of interferences that occured at each node.}
+        \label{fig:sub1}
+    \end{figure}
+
+    \begin{figure}%[h]
+        \centering
+        \includegraphics[scale=0.3]{graph_1400_memories.png}
+        \caption{Neuroidal model (n=500, d=128, w=16, r=40) at 1400 memories. Node value indicates number of interferences that occured at each node.}
+        \label{fig:sub2}
+    \end{figure}
+
+    \begin{figure}%[h]
+        \centering
+        \includegraphics[scale=0.3]{graph_1600_memories.png}
+        \caption{Neuroidal model (n=500, d=128, w=16, r=40) at 1600 memories. Node value indicates number of interferences that occured at each node.}
+        \label{fig:sub3}
+    \end{figure}
+    
+    \begin{figure}%[h]
+        \centering
+        \includegraphics[scale=0.3]{graph_final_memories.png}
+        \caption{Neuroidal model (n=500, d=128, w=16, r=40) at capacity (1800 memories). Node value indicates number of interferences that occured at each node.}
+        \label{fig:sub4}
+    \end{figure}
+
+    \begin{figure}%[h]
+        \centering
+        \includegraphics[scale=0.3]{graph_1200_n_memories.png}
+        \caption{Neuroidal model (n=500, d=128, w=16, r=40) at 1200 memories. Node value indicates memory membership of the node.}
+        \label{fig:subn1}
+    \end{figure}
+
+    \begin{figure}%[h]
+        \centering
+        \includegraphics[scale=0.3]{graph_1400_n_memories.png}
+        \caption{Neuroidal model (n=500, d=128, w=16, r=40) at 1400 memories. Node value indicates memory membership of the node.}
+        \label{fig:subn2}
+    \end{figure}
+
+    \begin{figure}%[h]
+        \centering
+        \includegraphics[scale=0.3]{graph_1600_n_memories.png}
+        \caption{Neuroidal model (n=500, d=128, w=16, r=40) at 1600 memories. Node value indicates memory membership of the node.}
+        \label{fig:subn3}
+    \end{figure}
+    
+    \begin{figure}%[h]
+        \centering
+        \includegraphics[scale=0.3]{graph_final_n_memories.png}
+        \caption{Neuroidal model (n=500, d=128, w=16, r=40) at capacity (1800 memories). Node value indicates memory membership of the node}
+        \label{fig:subn4}
+    \end{figure}
 
 
+    
 
 
+Finally, we made some attempts to gain some initial understanding of why memories formed by JOIN tend to interfere a lot more than randomly generated memories. We visualize the graphs and analyze the nodes with respect to two metrics: number of memories the nodes belong to and the number of interferences that have occured at those nodes. We choose the same parameters as before except we choose 1000 randomly inserted starting memories instead of 100. This will lead to overall higher capacity and allow us to analyze in more depth. Perrine has demonstrated that the capacity of the Neuroidal model scales up with the amount of starting memories \cite{perrine2023neural}. We are able to verify this as our simulation ended up producing around 1800 memories, in particular, an additional 800 JOINed memories as compared to the 150 with 100 starting memories. A possible explanation for this intriguing behavior would be that since these starting memories are randomly generated and follow our results that predict significantly low interference among them, they are making it harder for the system to reach the threshold in constraint 3 in definition 5, which can be interpreted as total interference over number of total memories in the system. 
 
+Figures \ref{fig:sub1} through \ref{fig:sub4} and \ref{fig:subn1} through \ref{fig:subn4} show the progression of the system from 1200 memories till the system reaches capacity with the value inside the node indicating the number of interferences that occured at that node and the number of memories the node belongs to respectively. The relative size of the node indicates the indegree of the node.  We observe that the interference is not uniformly distributed accross the nodes. And as we observe the pattern of evolution, we see that certain nodes end up with a lot of interference while many have negligible amount of interference. We also note that nodes that have already accumulated some interference have a higher chance of being a center of interference again. Practically, this indicates that some nodes are just innately more prone to interference than other nodes due to the initial edge layout. This is in constrast to our theory which assumes that the nodes are equal at the start and throughout the life of the system. We believe this is the primary factor that will need to be accounted for in attempts to update the theory and in particular, lemma \ref{lemma:k-int-prob} to be compatible with JOIN. We believe this is really challenging and leave it as future work. 
 
-\section{Discussion}
-
-
+We also note that the number of memories a node is part of has no correlation to the number of interferences at that node and therefore is not a good indicator of future interference at that node and cannot be used as a heuristic to update our estimate. There is some correlation between the in-degree and the interference and could provide intuition regarding updating lemma \ref{lemma:k-int-prob}. 
 
 
 
