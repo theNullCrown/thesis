@@ -8,24 +8,6 @@ First we will go over the theoretical results of our analysis.
 
 \subsection{Interference}
 
-We now formally define a notion of interference between subsets. 
-
-\begin{definition}
-    (\textbf{\textit{k}-Interference}) Given two sets $U, W$, and some number $k \in (0,|W|]$, we say $U$ $k-$\textit{interferes} with $W$ if 
-    \begin{equation}
-        |U \cap W| \ge  \frac{|W|}{k}.
-    \end{equation}
-\end{definition}
-
-\begin{corollary}
-    \label{collorary:k-int-equals}
-        If $|U| = |W|$, then $U$ $k$-interferes with $W$ if and only if $W$ $k$-interferes with $U$.
-    \end{corollary}
-    
-We restrict the upper range of $k$ to $|W|$ for convenience, as beyond that all values of $\frac{|W|}{k}$ will be less than 1.
-
-This is a generalization of the notion of interference introduced by Valiant in 2005. Valiant defines a memory to be in a ``firing" state if more than half the nodes in the memory are in a ``firing" state. He then defines interference as the unintential firing of a memory $W$ when another memory $U$ is fired, which is possible if and only if more than half the nodes of $W$ are also present in $U$ \cite{valiant2005memorization}. This corresponds to the $k = 2$ case of our definition. 
-
 We are now interested in finding the probability of a randomly picked subset interfering with another randomly picked subset. We start with the case where they are randomly picked as we believe it is the simplest case. We will touch upon other possible cases in the Discussion section below when discussing models in Computational Neuroscience that use unique memory generation algorithms.
 
 \begin{lemma}
@@ -86,17 +68,7 @@ then $$ \bar{F}_Y\left(\left\lfloor \frac{r_w}{k}
     \end{proof}
 
     \subsection{Capacity}
-    With the above lemmas in our arsenal we can now move on  the main subject of this thesis. We now formally define the capacity of a system of overlapping subsets with interference being the limiting factor. 
-
-    \begin{definition} (\textbf{(\textit{$r,T,k,\delta$})-Subset Capacity}) Given a set $V = \{v_1,...,v_n\}$, and parameters $r, T, k, \delta > 0$, the \textit{$(r,T,k,\delta)$-subset capacity} of $V$ is the \textit{maximum} number of subsets that can be picked subject to the conditions that for any randomly picked subset $U$,
-        \begin{enumerate}
-            \item $|U| \in [r-\delta,r+\delta]$,
-            \item $n >> 2(r+\delta)$,
-            \item \label{equ:cap-bound-expected}$E[X_U] \le T$ where $X_U$ is a random variable denoting the number of interferences caused due to picking $U$. 
-        \end{enumerate}
-    \end{definition}
-
-    We need the second restriction on the memories here since we want to apply lemma \ref{lemma:expected-k-int-prob} to every pair. The third restriction here can be thought of as a stopping criteria as we stop picking the subsets once the expectation of interference reaches that threshold. In the context of models in computational neuroscience like the Neuroidal Model, this means that there will be too much impact on the quality of memorization, that is too much noise and misfiring in the system if we add any further memories.
+    With the above lemmas in our arsenal we can now move on  the main subject of this thesis. 
     
     Before deriving the capacity for the general case, let us consider the simpler case where all memories have the exact same size. This is valuable since it results in a much simpler expression and we can use this as an approximation for the more general case too. However note that we realize this scenario is not biologically plausible at all. 
 

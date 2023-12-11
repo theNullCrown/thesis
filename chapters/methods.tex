@@ -1,1 +1,47 @@
 \chapter{Methods}
+
+In this chapter, we will discuss the methods we used to arrive at our results. 
+
+\section{Theoretical methods}
+
+To derive the theoretical results, we used basic properties of real numbers, core principles from probability theory, and properties of common statistical distributions like normal, binomial and hypergeometric distributions. We start by focusing on a basic set with subsets being the main substructure of interest. As random graphs are a type of subsets, most of these general results will apply to the models discussed in Chapter 2 as long as the hypothesis is satisfied. 
+
+Before we can proceed further we need to formally define the notion of interference between subsets. 
+
+\begin{definition}
+    (\textbf{\textit{k}-Interference}) Given two sets $U, W$, and some number $k \in (0,|W|]$, we say $U$ $k-$\textit{interferes} with $W$ if 
+    \begin{equation}
+        |U \cap W| \ge  \frac{|W|}{k}.
+    \end{equation}
+\end{definition}
+
+\begin{corollary}
+    \label{collorary:k-int-equals}
+        If $|U| = |W|$, then $U$ $k$-interferes with $W$ if and only if $W$ $k$-interferes with $U$.
+    \end{corollary}
+    
+We restrict the upper range of $k$ to $|W|$ for convenience, as beyond that all values of $\frac{|W|}{k}$ will be less than 1.
+
+This is a generalization of the notion of interference introduced by Valiant in 2005. Valiant defines a memory to be in a ``firing" state if more than half the nodes in the memory are in a ``firing" state. He then defines interference as the unintential firing of a memory $W$ when another memory $U$ is fired, which is possible if and only if more than half the nodes of $W$ are also present in $U$ \cite{valiant2005memorization}. This corresponds to the $k = 2$ case of our definition. 
+
+We now formally define the capacity of a system of overlapping subsets with interference being the limiting factor. 
+
+    \begin{definition} (\textbf{(\textit{$r,T,k,\delta$})-Subset Capacity}) Given a set $V = \{v_1,...,v_n\}$, and parameters $r, T, k, \delta > 0$, the \textit{$(r,T,k,\delta)$-subset capacity} of $V$ is the \textit{maximum} number of subsets that can be picked subject to the conditions that for any randomly picked subset $U$,
+        \begin{enumerate}
+            \item $|U| \in [r-\delta,r+\delta]$,
+            \item $n >> 2(r+\delta)$,
+            \item \label{equ:cap-bound-expected}$E[X_U] \le T$ where $X_U$ is a random variable denoting the number of interferences caused due to picking $U$. 
+        \end{enumerate}
+    \end{definition}
+
+    The first item simply accounts for the fact that the memories need not be exactly size $r$ however it should be bounded reasonably for us to make any claims regarding the capacity. We need the second restriction on the memories here since we want to apply lemma \ref{lemma:expected-k-int-prob}, that will be introduced later, to every pair. The third restriction here can be thought of as a stopping criteria as we stop picking the subsets once the expectation of interference reaches that threshold. In the context of models in computational neuroscience like the Neuroidal Model, this means that there will be too much impact on the quality of memorization, that is too much noise and misfiring in the system if we add any further memories.
+
+    We believe these definitions of interference and capacity are rigorous and general enough to apply to a wide range of contemporary models of neural cognition. 
+
+\section{Empirical methods}
+
+To validate our results empirically, we compare our results against the capacity of a simulated model. Perrine successfully implemented the Neuroidal model with shared one-step JOIN in 2023. The simulation uses the graph-tool python library which is a highly performant library written in C++ with wrappers for Python. Perrine also investigated the empirical capacity of the Neuroidal model under varying parameters. We build upon Perrine's codebase and make some key changes to achieve our goals. 
+
+First, we add the capability to the model to easily swap between memory creation algorithms. For our experiments, we use both the basic random memory creation and one-step shared JOIN algorithms. Future investigations into the capacity of random graph based models could be facilitated by adding support for more memory creation algorithms. 
+
+Second, we add the capability to the code to be able to generate visualizations of the model at regular intervals, this will allow us to visualize the model and develop deeper intuition into its behavior. This is especially critical for understanding JOIN and it's interference characteristics as these properties are not immediately obvious from the definition of the operation. 
