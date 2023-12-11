@@ -1,1 +1,90 @@
 \chapter{Background}
+
+In this chapter, we summarize the key characteristics of the Neuroidal model and Assembly Calculus relevant to our work. Both models are based on Erdős-R{\'e}nyi $G(n,p)$ random graphs with nodes representing neurons and subgraphs representing memories. 
+
+\section{Neuroidal model}
+
+In his 2005 paper, Valiant proposed the Neuroidal model to study memory formation and association in neural systems in a biologically plausible manner. The Neuroidal model consists of a network of neuroids, which are simplified model neurons. Each neuroid is a threshold unit connected to other neuroids via directed, weighted synapses. Valiant constrained the neuroidal model using four key biological parameters observed in cortex: total neuron count, synapses per neuron, synaptic strength relative to threshold, and neuron switching times \cite{valiant2005memorization}.
+
+A key contribution of Valiant's work is algorithms for two basic cognitive functions, JOIN and LINK, within the neuroidal model while respecting realistic biological constraints. JOIN implements memory formation - if representations for items A and B already exist in the network, JOIN modifies the network so a new representation C fires if and only if both A and B fire. LINK implements association - if A and B are already represented, LINK modifies the network so activation of A causes activation of B \cite{valiant2005memorization}.
+
+Now we summarize the key parameters that define the Neuroidal model:
+\begin{itemize}
+\item Number of neurons ($n$): \begin{itemize} \item Specifies total neuron count in the network.
+\item Values analyzed range from $10^5$ to $10^9$, consistent with biological observations
+\end{itemize}
+\item Number of synapses per neuron ($d$):
+\begin{itemize} \item Specifies expected number of synaptic connections from each neuron
+\item Models network connectivity density
+\item Values analyzed range from 16 to $10^6$
+\end{itemize}
+\item Synaptic strength ($k$):
+\begin{itemize} \item Relative to neuronal threshold required for neuron to fire
+\item Specifies strength of each synapse as a fraction of threshold
+\item Values analyzed range from $0.001$ to $0.125$ of the threshold
+\item Consistent with typically observed weak synapse strengths
+\end{itemize}
+\item Switching time:
+\begin{itemize} \item Speed of neuron response/state transitions
+\item Assumed to be 1 time unit for state changes, faster for threshold firings
+\end{itemize}
+\item Threshold ($T$):
+Integer threshold value that summed synaptic inputs must exceed to cause neuron firing
+\item Neuron state ($s$):
+Each neuron has a state value indicating current mode (e.g. firing or non-firing)
+\item Synapse state ($q$):
+\begin{itemize} \item State variable for each synapse
+\item Used in algorithms to indicate intermediate synapse values
+\end{itemize}
+\item Synapse weight ($w$):
+\begin{itemize} \item Integer weight of each synapse, summed to determine neuron inputs
+\item Initial weights set to $T/k$ based on synaptic strength parameter
+\end{itemize}
+\end{itemize}
+
+We try our best to use the same notation in our results whenever possible however please note that there are some distinctions. 
+
+\subsection{JOIN}
+
+We are primarily interested in JOIN as it the main memory formation tool of this model. Valiant discusses three variants of JOIN in his work - two-step disjoint JOIN, two-step shared JOIN, and one-step shared JOIN. The disjoint version is of little value to our analysis of capacity. Valiant did not make any claims of difference in biological plausibility between the one-step and two-step shared JOIN operations however we will focus on the one-step shared version as it easier to implement and computationally more efficient \cite{valiant2005memorization}. Further, it has already been succesfully simulated by Perrine in 2023 \cite{perrine2023neural}. 
+
+For the shared one-step case, Valiant suggests a slight change to the parameters - instead of a single synaptic strength parameter we now have two seperate parameters for memorization and association, $k_m$ and $k_a$ respectively that follow the relation $k_m = 2 k_a$. The algorithm can be summarized as follows \cite{valiant2005memorization}:
+\begin{enumerate}
+    \item Fire memory A and B simultaneously
+    \item Propagate the synapse weights to all neuroids that have edges going from A or B to them
+    \item Collect the neuroids that have total number of edges greater than $k_m$
+    \item Group these neuroids together and call it memory C. 
+\end{enumerate}
+Note that since the synapse weight is $T/k_m$, by having greater than $k_m$ incoming edges from A or B, the total weight of the neuroid will be greater than $T$ causing it to fire.  
+
+This results in a set of approximately $r$ C neuroids that represent the conjunction of A and B - firing A or B will trigger atleast half of these C neuroids to fire causing C to fire. Subsequent JOIN operations treat C representations as first-class citizens like A and B \cite{valiant2005memorization}.
+
+\section{Assembly Calculus}
+
+Inspired by the Neuroidal model, Christos H. Papadimitriou, Santosh S. Vempala, Daniel Mitropolsky, and Wolfgang Maass proposed the Assembly Calculus, an updated model of neural computation, in their 2020 paper ``Brain computation by assemblies of neurons''. Assemblies are defined as large populations of neurons believed to imprint memories. Then, they introduce a set of operations on assemblies. These operations correspond to properties of neuron assemblies observed in experiments, and can be shown, analytically and through simulations, to be realizable by generic, randomly connected populations of neurons with Hebbian plasticity and inhibition. Assemblies occupy a level of detail intermediate between the level of spiking neurons and synapses and that of the whole brain. They then argue that the resulting computational system can in principle be capable of carrying out arbitrary computations. The authors believe that something like it may underlie higher human cognitive functions like reasoning \cite{papadimitriou2020brain}. 
+
+The main parameters of the model are:
+\begin{itemize}
+    \item The number of excitatory neurons in an area ($n$) 
+    \item The probability of recurrent and afferent synaptic connectivity ($p$)
+    \item The maximum number of firing neurons in any area ($k$)
+    \item Plasticity coefficient ($\beta$)
+\end{itemize}
+
+Typical values of these parameters used in the accompanying simulations with the 2020 paper are $n = 10^{6-7} , p = 10^{-3}, k = 10^{2-3}$, and $\beta = 0.1$ \cite{papadimitriou2020brain}.
+
+\subsection{Project}
+
+Project is one of the two primary memory creation operations of the Assembly Calculus. This operation creates a "copy" of an existing assembly $x$ in a new brain area $B$. It works by repeated firing of assembly $x$ while area $B$ is temporarily disinhibited. Through recurrent excitation and competition mediated by inhibition, a sequence of neuronal activity in area $B$ converges to form a stable new assembly $y$ that will fire whenever $x$ fires subsequently. This models experimentally observed phenomenon where assemblies activate associated assemblies in downstream areas. Projection underlies creation of new long-term memories \cite{papadimitriou2020brain}.
+
+\subsection{Merge}
+
+Merge is the other main memory creation tool in the Assembly Calculus. This operation combines two existing assemblies $x$ and $y$ into a single new assembly $z$ with strong reciprocal connections to $x$ and $y$. It is the most complex operation, requiring coordinated firing across 5 areas - those containing $x$, $y$, parents of $x$, parents of $y$, and the area A that will contain the new assembly $z$. Through repeated co-activation of $x$ and $y$ by their parents, recurrent excitation and inhibition between $A$ and the areas containing $x$ and $y$, the connectivities are adjusted and a new merged assembly $z$ forms in $A$. This operation is used to create merged neural representations supporting hierarchical combinations \cite{papadimitriou2020brain}.
+
+\subsection{The NEMO model}
+
+Recently, Max Dabagia, Christos H Papadimitriou, and Santosh Vempala have introduced the NEMO model, an updated version of the Assembly calculus that claims to be even more biologically plausible by being able to create, process and manipulate temporal sequences of stimuli and memories. The primary contribution of this model is the introduction of an updated version of Project called Sequence project, a operation that can project a sequence of memories down \cite{dabagia2023computation}.  
+
+\section{Connection to this work}
+
+Despite the different nomenclature and goals of these models, they all share the same basic structure - a random graph representing the brain or brain area, subgraphs representing memories and nodes representing neurons. We believe that a common definitions of interference and capacity will apply to all such models, although the exact formulation of expected interference between memories and capacity will vary between different memory creation algorithms. 

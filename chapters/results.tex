@@ -1,6 +1,11 @@
 \chapter{Results}
 
+In this chapter, we discuss the primary contributions of this work. 
+
 \section{Theoretical results}
+
+First we will go over the theoretical results of our analysis. 
+
 \subsection{Interference}
 
 We now formally define a notion of interference between subsets. 
@@ -49,7 +54,7 @@ $$
 Recall from statistics that the expectation of a binary payoff, like intersection, that depends on a cutoff (in this case $\left\lceil \frac{r_w}{k} \right\rceil$) is equal to the probability of the variable being greater than or equal to the cutoff. Therefore the probability in lemma \ref{lemma:k-int-prob} is equal to the expected number of interferences of $U$ with $W$. 
 
 We then want to estimate the expected number of interferences when the sizes of the subsets are within a certain offset of $r$, say $\delta$ without being exactly equal to $r$. This approach will make our results more applicable to models like the Neuroidal Model that assume memory sizes follow some distribution \cite{valiant2005memorization}. The offset can be selected to best suit the distribution involved. For example if the sizes come from a discrete distribution like $\mathcal{B}(r/p,p)$, and if the variance $r(1-p)$ is more than $10$, it makes sense to choose $\delta  = 2\sqrt{r(1-p)}$ since roughly 95\% of all values lie within $[r-2\sigma,r+2\sigma]$.
-
+ 
 Generalizing this without any further assumptions is quite hard as the binomial coefficients do not vary nicely as a function of two variables over their domain. Instead we will make a reasonable assumption that will allow us to derive a reasonable lower bound for this expectation in terms of a general parameter instead of individual subset sizes. 
 
 \begin{lemma}
@@ -262,9 +267,9 @@ Like in the fixed case, we compare the simulated and analytical capacities again
 
 \section{Application to Other Models}
 
-We believe our theoretical framework for interference and capacity calculations can be extended to analyze and understand the behavior of graph-based models with more complex memory creation algorithms. The primary distinction between our simple model and more complicated models like the Neuroidal model and Assembly Caculus is with regards to the memory creation algorithm. We implicitly assume a random memory creation algorithm in lemma \ref{lemma:k-int-prob} while the Neuroidal model and Asssembly Calculus use the JOIN and Project memory creation algorithms respectively \cite{papadimitriou2020brain} \cite{valiant2005memorization}. Since no other part of our theory makes any assumption about the process of memory formation, we believe that adjusting the calculation of expected interference between two memories in lemma \ref{lemma:k-int-prob} to incorporate the nuances of other memory creation algorithms and using it appropriately in Theorem \ref{thm:exact-r} or \ref{thm:bounded-r} will give us an accurate representation of capacity in those models.
+We believe our theoretical framework for interference and capacity calculations can be extended to analyze and understand the behavior of graph-based models with more complex memory creation algorithms. The primary distinction between our simple model and more complicated models like the Neuroidal model and Assembly Caculus is with regards to the memory creation algorithm. We implicitly assume a random memory creation algorithm in lemma \ref{lemma:k-int-prob} while the Neuroidal model uses the JOIN operation and the Assembly Calculus uses the Project and Merge operations for memory creation \cite{papadimitriou2020brain, valiant2005memorization}. Since no other part of our theory makes any assumption about the process of memory formation, we believe that adjusting the calculation of expected interference between two memories in lemma \ref{lemma:k-int-prob} to incorporate the nuances of other memory creation algorithms and using it appropriately in Theorem \ref{thm:exact-r} or \ref{thm:bounded-r} will give us an accurate representation of capacity in those models.
 
-We maintain the generality of our interference calculation while allowing for variations in memory creation algorithms. Specifically, we can refine the lemma to account for the JOIN and Project operations, ensuring that our interference metric aligns with the unique characteristics of each model. This adaptability enables the application of our interference and capacity framework to a broader class of graph-based models in computational neuroscience.
+We maintain the generality of our interference calculation while allowing for variations in memory creation algorithms. Specifically, we can refine the lemma to account for the JOIN, Project and Merge operations, ensuring that our interference metric aligns with the unique characteristics of each model. This adaptability enables the application of our interference and capacity framework to a broader class of graph-based models in computational neuroscience.
 
 The flexibility of our theoretical approach allows researchers to tailor interference calculations based on the specifics of memory creation algorithms in diverse neural network models. As a result, our capacity analysis can provide valuable insights into the limitations and efficiency of these models, enhancing our understanding of their memory storage capabilities.
 
