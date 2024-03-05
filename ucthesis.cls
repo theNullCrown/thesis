@@ -220,7 +220,6 @@
 \def\chaptername{Chapter}
 %                ~~~~~~~
 % \appendix:
-\def\appendixname{Appendix}
 %                 ~~~~~~~~
 % \part
 \def\partname{Part}
@@ -387,6 +386,8 @@ AUTHOR: &\@author     \par\\
 DATE SUBMITTED: &\@degreemonth~\@degreeyear  \par\\
 
 \par\\
+\par\\
+\par\\
 
 COMMITTEE CHAIR:  &\begin{minipage}[t]{\columnwidth}\begin{flushleft}\@chair\end{flushleft}\end{minipage}  \par\\\\
 \ifnum\@numberofmembers>1 COMMITTEE MEMBER: &\begin{minipage}[t]{\columnwidth}\begin{flushleft}\@othermemberA\end{flushleft}\end{minipage}     \par\\\\ \fi
@@ -443,7 +444,7 @@ ALL RIGHTS RESERVED
 {\fmfont
 {\abstractname}\par
 \@title\par
-\vspace{.1in}
+\vspace{0.5in}
 \@author\par
 %{\@degree} in \@field\par
 %\vspace{.1in}

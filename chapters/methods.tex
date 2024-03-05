@@ -22,7 +22,7 @@ Before we can proceed further we need to formally define the notion of interfere
     
 We restrict the upper range of $k$ to $|W|$ for convenience, as beyond that all values of $\frac{|W|}{k}$ will be less than 1.
 
-This is a generalization of the notion of interference introduced by Valiant in 2005. Valiant defines a memory to be in a ``firing" state if more than half the nodes in the memory are in a ``firing" state. He then defines interference as the unintential firing of a memory $W$ when another memory $U$ is fired, which is possible if and only if more than half the nodes of $W$ are also present in $U$ \cite{valiant2005memorization}. This corresponds to the $k = 2$ case of our definition. 
+This is a generalization of the notion of interference introduced by Valiant in 2005 \cite{valiant2005memorization}. Valiant defines a memory to be in a ``firing" state if more than half the nodes in the memory are in a ``firing" state. He then defines interference as the unintential firing of a memory $W$ when another memory $U$ is fired, which is possible if and only if more than half the nodes of $W$ are also present in $U$. This corresponds to the $k = 2$ case of our definition. 
 
 We now formally define the capacity of a system of overlapping subsets with interference being the limiting factor. 
 
@@ -30,7 +30,8 @@ We now formally define the capacity of a system of overlapping subsets with inte
         \begin{enumerate}
             \item $|U| \in [r-\delta,r+\delta]$,
             \item $n >> 2(r+\delta)$,
-            \item \label{equ:cap-bound-expected}$E[X_U] \le T$ where $X_U$ is a random variable denoting the number of interferences caused due to picking $U$. 
+            \item \label{equ:cap-bound-expected}$E[X_U] \le T$ where $X_U$ is a random variable denoting the number of \\
+             $k$-interferences caused due to picking $U$. 
         \end{enumerate}
     \end{definition}
 
@@ -40,7 +41,7 @@ We now formally define the capacity of a system of overlapping subsets with inte
 
 \section{Empirical methods}
 
-To validate our results empirically, we compare our results against the capacity of a simulated model. Perrine successfully implemented the Neuroidal model with shared one-step JOIN in 2023. The simulation uses the graph-tool python library which is a highly performant library written in C++ with wrappers for Python. Perrine also investigated the empirical capacity of the Neuroidal model under varying parameters. We build upon Perrine's codebase and make some key changes to achieve our goals. 
+To validate our results empirically, we compare our theoretical results against the capacity of a simulated model. Perrine successfully implemented the Neuroidal model with shared one-step JOIN in 2023. The simulation uses the graph-tool python library which is a highly performant library written in C++ with wrappers for Python. Perrine also investigated the empirical capacity of the Neuroidal model under varying parameters. We build upon Perrine's codebase and make some key changes to achieve our goals. 
 
 First, we add the capability to the model to easily swap between memory creation algorithms. For our experiments, we use both the basic random memory creation and one-step shared JOIN algorithms. Future investigations into the capacity of random graph based models could be facilitated by adding support for more memory creation algorithms. 
 

@@ -1,6 +1,6 @@
 \chapter{Results}
 
-In this chapter, we discuss the primary contributions of this work. 
+In this chapter, we present the primary contributions of this work and provide discussion justifying their applicability to contemporary neuroscience. 
 
 \section{Theoretical results}
 
@@ -12,7 +12,7 @@ We are now interested in finding the probability of a randomly picked subset int
 
 \begin{lemma}
     \label{lemma:k-int-prob}
-	Given a set $V$ with $n$ items and two subsets $U,W$ of respective sizes $r_u,r_w$, denote the size of the intersection between them by the random variable $Y$. Then the probability of $U$ $k$-interfering with $W$ is $$\sum_{y = \left\lceil \frac{r_w}{k} \right\rceil}^{r_w} \frac{\binom{r_u}{y} \binom{n-r_u}{r_w-y}}{\binom{n}{r_w}}$$ and $Y \sim Hypergeometric(n, r_u, r_w)$.
+	Given a set $V$ with $n$ items and two subsets $U,W$ of respective sizes $r_u,r_w$, denote the size of the intersection between them by the random variable $Y_{u,w}$. Then the probability of $U$ $k$-interfering with $W$ is $$\sum_{y = \left\lceil \frac{r_w}{k} \right\rceil}^{r_w} \frac{\binom{r_u}{y} \binom{n-r_u}{r_w-y}}{\binom{n}{r_w}}$$ and $Y_{u,w} \sim Hypergeometric(n, r_u, r_w)$.
 \end{lemma}
 \begin{proof}
 	If $V = \{v_1,...,v_n\}$, we can represent the first randomly picked subset $U$ as a boolean vector $u$ of length $n$ defined by
@@ -22,16 +22,16 @@ We are now interested in finding the probability of a randomly picked subset int
         0 & \text{if } v_i \notin U.
     \end{cases}
     $$
-    With this representation, $U$ will intersect another randomly picked subset $W$ at the indices where both boolean vectors $u, w$ have a $1$. Then $Y$ denotes the number of indices where both $u, w$ have a 1. First note that
+    With this representation, $U$ will intersect another randomly picked subset $W$ at the indices where both boolean vectors $u, w$ have a $1$. Then $Y_{u,w}$ is equivalent to the number of indices where both $u, w$ have a 1. First note that
     \begin{equation}
-        \mathbb{P}(Y=y) = \frac{\binom{r_u}{y} \binom{n-r_u}{r_w-y}}{\binom{n}{r_w}}.
+        \mathbb{P}(Y_{u,w}=y) = \frac{\binom{r_u}{y} \binom{n-r_u}{r_w-y}}{\binom{n}{r_w}}.
     \end{equation}
-    This follows from the fact that given the first vector $U$, we already know where the 1's are located. We can pick the $y$ intersecting 1's for the second vector in $\binom{r_u}{y}$ ways implicitly placing 0's in the remaining spots. We then fill the remaining $n-r_u$ indices corresponding to the 0's in the first vector with $r_w-y$ 1's in $\binom{n-r_u}{r_w-y}$ ways. Finally we divide by the total number of possible subsets $\binom{n}{r_w}$. Clearly, this is the probability mass function of the hypergeometric distribution with population size $n$, $r_u$ success states and $r_w$ draws. We conclude that $Y \sim Hypergeometric(n, r_u, r_w)$. Finally, to find the probability of $U$ $k$-interfering with $W$ we need to find $\mathbb{P}(Y \ge \left\lceil \frac{r_w}{k} \right\rceil)$ which is the sum of $\mathbb{P}(Y=y)$ from $y = \left\lceil \frac{r_w}{k} \right\rceil$ to $y = r_w$.
+    This follows from the fact that given the first vector $U$, we already know where the 1's are located. We can pick the $y$ intersecting 1's for the second vector in $\binom{r_u}{y}$ ways implicitly placing 0's in the remaining spots. We then fill the remaining $n-r_u$ indices corresponding to the 0's in the first vector with $r_w-y$ 1's in $\binom{n-r_u}{r_w-y}$ ways. Finally we divide by the total number of possible subsets $\binom{n}{r_w}$. Clearly, this is the probability mass function of the hypergeometric distribution with population size $n$, $r_u$ success states and $r_w$ draws. We conclude that $Y_{u,w} \sim Hypergeometric(n, r_u, r_w)$. Finally, to find the probability of $U$ $k$-interfering with $W$ we need to find $\mathbb{P}(Y_{u,w} \ge \left\lceil \frac{r_w}{k} \right\rceil)$ which is the sum of $\mathbb{P}(Y_{u,w}=y)$ from $y = \left\lceil \frac{r_w}{k} \right\rceil$ to $y = r_w$.
 \end{proof}
 
-For brevity, we can reinterpret the above probability as the tail distribution function of $Y$ at $\left\lfloor \frac{r_w}{k} \right\rfloor$, 
+For brevity, we can reinterpret the above probability as the tail distribution function of $Y_{u,w}$ at $\left\lfloor \frac{r_w}{k} \right\rfloor$, 
 $$
-\mathbb{P}\left(Y \geq \left\lceil \frac{r_w}{k} \right\rceil\right) = \mathbb{P}\left(Y > \left\lfloor \frac{r_w}{k} \right\rfloor\right) = \bar{F}_Y\left(\left\lfloor \frac{r_w}{k} \right\rfloor\right)
+\mathbb{P}\left(Y_{u,w} \geq \left\lceil \frac{r_w}{k} \right\rceil\right) = \mathbb{P}\left(Y_{u,w} > \left\lfloor \frac{r_w}{k} \right\rfloor\right) = \bar{F}_{Y_{u,w}}\left(\left\lfloor \frac{r_w}{k} \right\rfloor\right)
 $$
 Recall from statistics that the expectation of a binary payoff, like intersection, that depends on a cutoff (in this case $\left\lceil \frac{r_w}{k} \right\rceil$) is equal to the probability of the variable being greater than or equal to the cutoff. Therefore the probability in lemma \ref{lemma:k-int-prob} is equal to the expected number of interferences of $U$ with $W$. 
 
@@ -41,12 +41,12 @@ Generalizing this without any further assumptions is quite hard as the binomial 
 
 \begin{lemma}
     \label{lemma:expected-k-int-prob}
-    Given a set $V$ with $n$ items and two subsets $U,W$ of respective sizes $r_u,r_w$, denote the size of the intersection between them by the random variable $Y$.
+    Given a set $V$ with $n$ items and two subsets $U,W$ of respective sizes $r_u,r_w$, denote the size of the intersection between them by the random variable $Y_{u,w}$.
         If \begin{enumerate}
             \item $r_u, r_w \in [r-\delta, r+\delta]$ for some $r, \delta > 0$,
             \item $n >> 2(r+\delta)$, 
         \end{enumerate}      
-then $$ \bar{F}_Y\left(\left\lfloor \frac{r_w}{k} 
+then $$ \bar{F}_{Y_{u,w}}\left(\left\lfloor \frac{r_w}{k} 
 \right\rfloor\right) \ge \sum_{y = \left\lceil \frac{r+\delta}{k} \right\rceil}^{\left\lfloor r - \delta \right\rfloor} \frac{\binom{r-\delta}{y} \binom{n-r-\delta}{r-\delta-y}}{\binom{n}{r+\delta}}$$
     \end{lemma}
     \textit{Remark.} Before proceeding with the proof, we want to justify the second assumption made here. It is a known fact that bounding binomial coefficients above or below is hard due to the nature of how it varies with respect to the second argument. We know that $n \choose k$ reaches its maximum value at $\left\lceil \frac{n}{2} \right\rceil$ or $\left\lfloor \frac{n}{2} \right\rfloor$ and it is monotonically increasing at smaller values and decreasing at larger values. My making the assumption here we can ensure that our second argument is always a lot smaller than this maxima, and as such an increase in the second argument will only increase the value of the expression. This assumption is reasonable since models like the Neuroidal Model expect the memory sizes to be significantly smaller than the size of the model \cite{valiant2005memorization}. Also note that the binomial coefficient increases monotonically with respect to the first argument. 
@@ -55,9 +55,9 @@ then $$ \bar{F}_Y\left(\left\lfloor \frac{r_w}{k}
         Then observe that 
         \begin{equation}
             \begin{split}
-                \bar{F}_Y\left(\left\lfloor \frac{r_w}{k} \right\rfloor\right)  
+                \bar{F}_{Y_{u,w}}\left(\left\lfloor \frac{r_w}{k} \right\rfloor\right)  
                 &=
-                 \sum_{y = \left\lceil \frac{r_w}{k} \right\rceil}^{r_w} \mathbb{P}(Y=y)  
+                 \sum_{y = \left\lceil \frac{r_w}{k} \right\rceil}^{r_w} \mathbb{P}(Y_{u,w}=y)  
                 \\[2em] &=    \sum_{y = \left\lceil \frac{r_w}{k} \right\rceil}^{r_w} \frac{\binom{r_u}{y} \binom{n-r_u}{r_w-y}}{\binom{n}{r_w}} 
                 \\[2em] &\ge  \sum_{y = \left\lceil \frac{r_w}{k} \right\rceil}^{r_w} \frac{\binom{r-\delta}{y} \binom{n-r-\delta}{r-\delta-y}}{\binom{n}{r+\delta}}  
                 \\[2em] &\ge  \sum_{y = \left\lceil \frac{r+\delta}{k} \right\rceil}^{\left\lfloor r - \delta \right\rfloor} \frac{\binom{r-\delta}{y} \binom{n-r-\delta}{r-\delta-y}}{\binom{n}{r+\delta}}  
@@ -76,20 +76,20 @@ then $$ \bar{F}_Y\left(\left\lfloor \frac{r_w}{k}
         \label{thm:exact-r}
         Given a set $V$ with $n$ items and the property that every picked subset will have size exactly $r$, the $(r,T,k,\delta)$-subset capacity of $V$ is 
         \begin{equation*}
-            \left\lfloor \frac{T}{\bar{F}_Y\left(\left\lfloor \frac{r}{k} \right\rfloor\right)} + 1 \right\rfloor.
+            \left\lfloor \frac{T}{\bar{F}_{Y_{u,w}}\left(\left\lfloor \frac{r}{k} \right\rfloor\right)} + 1 \right\rfloor.
         \end{equation*}
     \end{theorem}
 
     \textit{Remark.} Since all subsets have fixed size $r$, note that the choice of $\delta$ is not relevant here.
 
     \begin{proof}[Proof 1.]
-         Suppose we have already have $M-1$ subsets in the universe. Pick a random subset $U$. From lemma \ref{lemma:k-int-prob}, we know that the expected number of $k$-interferences of $U$  with another arbitrary subset $W$ from the universe is $\bar{F}_Y\left(\left\lfloor \frac{r}{k} \right\rfloor\right)$. Since there are $M-1$ other subsets, the total expected number of $k$-interferences caused by picking $U$ is $(M-1) \bar{F}_Y\left(\left\lfloor \frac{r}{k} \right\rfloor\right)$.
+         Suppose we have already have $M-1$ subsets in the universe. Pick a random subset $U$. From lemma \ref{lemma:k-int-prob}, we know that the expected number of $k$-interferences of $U$  with another arbitrary subset $W$ from the universe is $\bar{F}_{Y_{u,w}}\left(\left\lfloor \frac{r}{k} \right\rfloor\right)$. Since there are $M-1$ other subsets, the total expected number of $k$-interferences caused by picking $U$ is $(M-1) \bar{F}_{Y_{u,w}}\left(\left\lfloor \frac{r}{k} \right\rfloor\right)$.
 
         From inequality \ref{equ:cap-bound-expected} in the definition of capacity, we have 
         
             \begin{equation}
             \label{equ:cap-exact-r}
-                (M-1) \bar{F}_Y\left(\left\lfloor \frac{r}{k} \right\rfloor\right) \le T \implies M \le \frac{T}{\bar{F}_Y\left(\left\lfloor \frac{r}{k} \right\rfloor\right)} + 1.
+                (M-1) \bar{F}_{Y_{u,w}}\left(\left\lfloor \frac{r}{k} \right\rfloor\right) \le T \implies M \le \frac{T}{\bar{F}_{Y_{u,w}}\left(\left\lfloor \frac{r}{k} \right\rfloor\right)} + 1.
             \end{equation}
             The $(r,T,k,\delta)$-subset capacity of $V$ then is the largest integer $M$ that satisfies inequality \ref{equ:cap-exact-r}.
     \end{proof}
@@ -97,23 +97,23 @@ then $$ \bar{F}_Y\left(\left\lfloor \frac{r_w}{k}
     We provide an alternate proof that, while less elegant, can be scaled to prove the general statement. 
 
     \begin{proof}[Proof 2.]
-        Suppose we have already have $M$ subsets in the universe. Pick two subsets $U,W$ without replacement. From lemma \ref{lemma:k-int-prob}, we know that the expected number of $k$-interferences of $U$ with $W$ is $\bar{F}_Y\left(\left\lfloor \frac{r}{k} \right\rfloor\right)$. Since we know all subsets have the same size, the expected number of $k$-interferences of $W$ with $U$ is the same. So the expected number of interferences caused by one pair is
+        Suppose we have already have $M$ subsets in the universe. Pick two subsets $U,W$ without replacement. From lemma \ref{lemma:k-int-prob}, we know that the expected number of $k$-interferences of $U$ with $W$ is $\bar{F}_{Y_{u,w}}\left(\left\lfloor \frac{r}{k} \right\rfloor\right)$. Since we know all subsets have the same size, the expected number of $k$-interferences of $W$ with $U$ is the same. So the expected number of interferences caused by one pair is
     $$
-    2\bar{F}_Y\left(\left\lfloor \frac{r}{k} \right\rfloor\right).
+    2\bar{F}_{Y_{u,w}}\left(\left\lfloor \frac{r}{k} \right\rfloor\right).
     $$
     We know that there are $\binom{M}{2} = M(M-1)/2$ such pairs so the expected number of total interferences is
     $$
-    2 \cdot \frac{M(M-1)}{2} \bar{F}_Y\left(\left\lfloor \frac{r}{k} \right\rfloor\right)  =  M(M-1) \bar{F}_Y\left(\left\lfloor \frac{r}{k} \right\rfloor\right). 
+    2 \cdot \frac{M(M-1)}{2} \bar{F}_{Y_{u,w}}\left(\left\lfloor \frac{r}{k} \right\rfloor\right)  =  M(M-1) \bar{F}_Y\left(\left\lfloor \frac{r}{k} \right\rfloor\right). 
     $$
     Since there are $M$ subsets, the expected number of interferences by choosing picking one subset is
     $$
-    \frac{M(M-1)}{M} \bar{F}_Y\left(\left\lfloor \frac{r}{k} \right\rfloor\right))  = (M-1) \bar{F}_Y\left(\left\lfloor \frac{r}{k} \right\rfloor\right).
+    \frac{M(M-1)}{M} \bar{F}_{Y_{u,w}}\left(\left\lfloor \frac{r}{k} \right\rfloor\right)  = (M-1) \bar{F}_{Y_{u,w}}\left(\left\lfloor \frac{r}{k} \right\rfloor\right).
     $$
     From inequality \ref{equ:cap-bound-expected}, we have 
 
     \begin{equation}
         \label{equ:cap-exact-r-2}
-        (M-1) \bar{F}_Y\left(\left\lfloor \frac{r}{k} \right\rfloor\right) \le T \implies M \le \frac{T}{\bar{F}_Y\left(\left\lfloor \frac{r}{k} \right\rfloor\right)} + 1.
+        (M-1) \bar{F}_{Y_{u,w}}\left(\left\lfloor \frac{r}{k} \right\rfloor\right) \le T \implies M \le \frac{T}{\bar{F}_{Y_{u,w}}\left(\left\lfloor \frac{r}{k} \right\rfloor\right)} + 1.
     \end{equation}
 The $(r,T,k,\delta)$-subset capacity of $V$ is the largest integer $M$ that satisfies inequality \ref{equ:cap-exact-r-2}.
     \end{proof}
@@ -134,27 +134,27 @@ We will now tackle the general case using the same strategy as above.
 
     Suppose we have $M$ subsets $U_1,...,U_M$ with sizes $r_1,...,r_M$. Pick two subsets $U_i,U_j$. From lemma \ref{lemma:k-int-prob}, we know that the expected number of interferences caused by this pair is
     $$
-    \bar{F}_Y\left(\left\lfloor \frac{r_j}{k} \right\rfloor\right) + \bar{F}_Y\left(\left\lfloor \frac{r_i}{k} \right\rfloor\right).
+    \bar{F}_{Y_{u,w}}\left(\left\lfloor \frac{r_j}{k} \right\rfloor\right) + \bar{F}_{Y_{w,u}}\left(\left\lfloor \frac{r_i}{k} \right\rfloor\right).
     $$
     We then sum over all possible pairings to get the expected number of total interferences:
     $$
-    \sum_{(i,j) \in \Z\times\Z, 1 \le i,j \le M, i \ne j} \Biggl( \bar{F}_Y\left(\left\lfloor \frac{r_j}{k} \right\rfloor\right) + \bar{F}_Y\left(\left\lfloor \frac{r_i}{k} \right\rfloor\right) \Biggr).
+    \sum_{(i,j) \in \Z\times\Z, 1 \le i,j \le M, i \ne j} \Biggl( \bar{F}_{Y_{u,w}}\left(\left\lfloor \frac{r_j}{k} \right\rfloor\right) + \bar{F}_{Y_{w,u}}\left(\left\lfloor \frac{r_i}{k} \right\rfloor\right) \Biggr).
     $$
 
 \noindent Since there are $M$ subsets, the expected number of interferences by picking one subset is
     $$
-    \frac{1}{M} \sum_{(i,j) \in \Z\times\Z, 1 \le i,j \le M, i \ne j}  \Biggl( \bar{F}_Y\left(\left\lfloor \frac{r_j}{k} \right\rfloor\right) + \bar{F}_Y\left(\left\lfloor \frac{r_i}{k} \right\rfloor\right) \Biggr).
+    \frac{1}{M} \sum_{(i,j) \in \Z\times\Z, 1 \le i,j \le M, i \ne j}  \Biggl( \bar{F}_{Y_{u,w}}\left(\left\lfloor \frac{r_j}{k} \right\rfloor\right) + \bar{F}_{Y_{u,w}}\left(\left\lfloor \frac{r_i}{k} \right\rfloor\right) \Biggr).
     $$
 
 \noindent From inequality \ref{equ:cap-bound-expected}, we have 
 
 \begin{equation*}
-      \frac{1}{M} \sum_{(i,j) \in \Z\times\Z, 1 \le i,j \le M, i \ne j}  \Biggl( \bar{F}_Y\left(\left\lfloor \frac{r_j}{k} \right\rfloor\right) + \bar{F}_Y\left(\left\lfloor \frac{r_i}{k} \right\rfloor\right) \Biggr)  \le T,
+      \frac{1}{M} \sum_{(i,j) \in \Z\times\Z, 1 \le i,j \le M, i \ne j}  \Biggl( \bar{F}_{Y_{u,w}}\left(\left\lfloor \frac{r_j}{k} \right\rfloor\right) + \bar{F}_{Y_{w,u}}\left(\left\lfloor \frac{r_i}{k} \right\rfloor\right) \Biggr)  \le T,
 \end{equation*}
 \noindent which implies
 \begin{equation}
 \label{equ:cap-r}      
-       M \geq \frac{1}{T}\sum_{(i,j) \in \Z\times\Z, 1 \le i,j \le M, i \ne j}  \Biggl( \bar{F}_Y\left(\left\lfloor \frac{r_j}{k} \right\rfloor\right) + \bar{F}_Y\left(\left\lfloor \frac{r_i}{k} \right\rfloor\right)\Biggr). 
+       M \geq \frac{1}{T}\sum_{(i,j) \in \Z\times\Z, 1 \le i,j \le M, i \ne j}  \Biggl( \bar{F}_{Y_{u,w}}\left(\left\lfloor \frac{r_j}{k} \right\rfloor\right) + \bar{F}_{Y_{w,u}}\left(\left\lfloor \frac{r_i}{k} \right\rfloor\right)\Biggr). 
 \end{equation}
 Using lemma \ref{lemma:expected-k-int-prob} we get
 \begin{equation}
@@ -181,7 +181,7 @@ First we simulate the case for fixed subset size $r$.
 \begin{figure}%[h]
     \centering
     \includegraphics[scale=0.8]{figures/cap-vs-n.png}
-    \caption[Capacity vs. Size of the set ($n$)]{How capacity is affected by increasing the size of the set ($n$).}
+    \caption[Capacity vs. Size of the set ($n$)]{Capacity vs. Size of the set ($n$). \textmd{How capacity is affected by increasing the size of the set ($n$). This figure compares the expression for fixed subset size against the simulation with fixed subset size.}}
     \label{figure:cap-vs-n}
     \end{figure}
 
@@ -191,14 +191,14 @@ We compare the average capacity of the simulation with the analytical result fro
     \begin{figure}%[h]
         \centering
         \includegraphics[scale=0.85]{figures/cap-vs-r.png}
-        \caption[Capacity vs. Size of the subsets ($r$)]{How capacity is affected by increasing the size of the subsets ($r$).}
+        \caption[Capacity vs. Size of the subsets ($r$)]{Capacity vs. Size of the subsets ($r$). \textmd{How capacity is affected by increasing the size of the subsets ($r$). This figure compares the expression for fixed subset size against the simulation with fixed subset size.}}
         \label{figure:cap-vs-r}
         \end{figure}
 
     \begin{figure}%[h]
             \centering
             \includegraphics[scale=0.85]{figures/larger-n.png}
-            \caption[Capacity vs. Size of the subsets ($r$) for $n = 500$]{How capacity is affected by increasing the size of the subsets ($r$) when $n = 500$.}
+            \caption[Capacity vs. Size of the subsets ($r$) for $n = 500$]{Capacity vs. Size of the subsets ($r$) for $n = 500$. \textmd{How capacity is affected by increasing the size of the subsets ($r$) when $n = 500$.}}
             \label{figure:larger-n}
             \end{figure}
 
@@ -210,34 +210,34 @@ Now we simulate the case where the subset sizes are not fixed but rather bounded
 \begin{figure}%[h]
     \centering
     \includegraphics[scale=0.82]{figures/cap-vs-n-bounded.png}
-    \caption[Capacity vs. Size of the set ($n$) when $r \sim \mathcal{N}(r,1)$ ]{How capacity is affected by increasing the size of the subsets ($r$) when $r$ is drawn from a normal distribution with mean $r$ and standard deviation $1$}
+    \caption[Capacity vs. Size of the set ($n$) when $r \sim \mathcal{N}(r,1)$]{Capacity vs. Size of the set ($n$) when $r \sim \mathcal{N}(r,1)$. \textmd{How capacity is affected by increasing the size of the subsets ($r$) when $r$ is drawn from a normal distribution with mean $r$ and standard deviation $1$. This figure compares the expression for bounded subset size against the simulation that draws memories from a distribution.}}
     \label{figure:cap-vs-n-bounded}
     \end{figure}
 
 \begin{figure}%[h]
     \centering
     \includegraphics[scale=0.83]{figures/cap-vs-r-bounded.png}
-    \caption[Capacity vs. Size of the subsets ($r$) when $r \sim \mathcal{N}(r,1)$ ]{How capacity is affected by increasing the size of the subsets ($r$) when $r$ is drawn from a normal distribution with mean $r$ and standard deviation $1$}
+    \caption[Capacity vs. Size of the subsets ($r$) when $r \sim \mathcal{N}(r,1)$]{Capacity vs. Size of the subsets ($r$) when $r \sim \mathcal{N}(r,1)$. \textmd{How capacity is affected by increasing the size of the subsets ($r$) when $r$ is drawn from a normal distribution with mean $r$ and standard deviation $1$. This figure compares the expression for bounded subset size against the simulation that draws memories from a distribution.}}
     \label{figure:cap-vs-r-bounded}
     \end{figure}
 
     \begin{figure}%[h]
         \centering
         \includegraphics[scale=0.83]{figures/cap-vs-r-bounded-exact-1.png}
-        \caption[Capacity vs. Size of the subsets ($r$) when $r \sim \mathcal{N}(r,1)$ comparing exact formula vs simulation]{How capacity is affected by increasing the size of the subsets ($r$) comparing the results of \ref{equ:cap-exact-r} with the simulation where $r$ is drawn from a normal distribution with mean $r$ and standard deviation $1$}
+        \caption[Capacity vs. Size of the subsets ($r$) when $r \sim \mathcal{N}(r,1)$ comparing exact formula vs simulation]{Capacity vs. Size of the subsets ($r$) when $r \sim \mathcal{N}(r,1)$ comparing exact formula vs simulation. \textmd{How capacity is affected by increasing the size of the subsets ($r$) comparing the results of \ref{equ:cap-exact-r} with the simulation where $r$ is drawn from a normal distribution with mean $r$ and standard deviation $1$. This figure compares the expression for fixed subset size against the simulation that draws memories from a distribution.}}
         \label{figure:cap-vs-r-bounded-exact-1}
         \end{figure}
 
         \begin{figure}%[h]
             \centering
             \includegraphics[scale=0.83]{figures/cap-vs-r-bounded-exact-2.png}
-            \caption[Capacity vs. Size of the subsets ($r$) when $r \sim \mathcal{N}(r,2)$]{How capacity is affected by increasing the size of the subsets ($r$) comparing the results of \ref{equ:cap-exact-r} with the simulation where $r$ is drawn from a normal distribution with mean $r$ and standard deviation $2$}
+            \caption[Capacity vs. Size of the subsets ($r$) when $r \sim \mathcal{N}(r,2)$]{Capacity vs. Size of the subsets ($r$) when $r \sim \mathcal{N}(r,2)$. \textmd{How capacity is affected by increasing the size of the subsets ($r$) comparing the results of \ref{equ:cap-exact-r} with the simulation where $r$ is drawn from a normal distribution with mean $r$ and standard deviation $2$. This figure compares the expression for fixed subset size against the simulation that draws memories from a distribution.}}
             \label{figure:cap-vs-r-bounded-exact-2}
             \end{figure}
 
 Like in the fixed case, we compare the simulated and analytical capacities against the size of the set and against the size of the subsets. For the comarison against size of the set, we set $r = 20$ and for the comparison against size of the subsets, we set $n = 100$. For both cases we fix $k=2, T=0.1$ and draw the $r$ values randomly from $\mathcal{N}(r,1)$ followed by conversion to integer. Based on the Empirical Law, we except $95\%$ of the values to lie within two standard deviations of $r$, so we choose $\delta = 2$. Figures \ref{figure:cap-vs-n-bounded} and \ref{figure:cap-vs-r-bounded} show the results of these experiments. We see that even thought the analytical bound from equation \ref{equ:cap-bound-expected} bounds the simulated capacity, the bound is very loose and does cannot be used as an approximation. We believe this is because of how the binomial coefficient varies with respect to its second parameter and that $\delta$ here, even though only $2$ is quite big with respect to $r$, and is reducing the second argument significantly in the term $n - r - \delta \choose r - \delta - y$. We believe that a larger $n$ and $r$ will make this bound tighter and applications like the Neuroidal model indeed use values of $n$ and $r$ that are orders of magnitudes larger. However, it is not feasible for us to simulate at such scale. We also compared the analytical results from equation \ref{equ:cap-exact-r} and it was still a good approximation for the simulation with randomly drawn r's. Figures \ref{figure:cap-vs-r-bounded-exact-1} and \ref{figure:cap-vs-r-bounded-exact-2} show the results of these simulations. As expected the simulated capacity is a lot closer to the analytical capacity when the standard deviation is low. 
 
-\section{Application to Other Models}
+\section{Discussion}
 
 We believe our theoretical framework for interference and capacity calculations can be extended to analyze and understand the behavior of graph-based models with more complex memory creation algorithms. The primary distinction between our simple model and more complicated models like the Neuroidal model and Assembly Caculus is with regards to the memory creation algorithm. We implicitly assume a random memory creation algorithm in lemma \ref{lemma:k-int-prob} while the Neuroidal model uses the JOIN operation and the Assembly Calculus uses the Project and Merge operations for memory creation \cite{papadimitriou2020brain, valiant2005memorization}. Since no other part of our theory makes any assumption about the process of memory formation, we believe that adjusting the calculation of expected interference between two memories in lemma \ref{lemma:k-int-prob} to incorporate the nuances of other memory creation algorithms and using it appropriately in Theorem \ref{thm:exact-r} or \ref{thm:bounded-r} will give us an accurate representation of capacity in those models.
 
@@ -253,73 +253,69 @@ The JOIN algorithm is unique in the sense that it must follow a set of 6 basic c
 
 First, we compare our results from equation \ref{equ:cap-bound-expected} with results from our simulation of the Neuroidal Model. Valiant calculated the memory sizes for various parameter combinations, however the minimum graph size he considered was 100,000. Our simulation of the Neuroidal model cannot be scaled up that far so we use $n = 500, d = 128, w = 16$. We used patterns found in his results to estimate that $r = 40$ would be the appropriate value for this configuration. We start with 100 randomly generated memories which have negligible interference between them, essentially agreeing with our results from Theorem \ref{thm:bounded-r}. We observed that newly formed memories had sizes around $40$, validating that we are compliant with Valiant's definition of JOIN. Finally, we set the interference threshold $T = 0.1$ and interference parameter $k = 2$ as that is the only value of $k$ supported by the Neuroidal model. 
 
-Our equation produces a capacity of 3203070686178 while the Neuroidal model simulation only reaches around 250 memories over 20 runs before stopping due to excess interference. Therefore our equation in its current form cannot serve as a good approximation for the Neuroidal model's capacity however it is effectively an upper bound on most models like these as the memory formation is not capacity optimized which we think makes sense biologically. We believe random memory generation is quite good for capacity and memory formation algorithms that are even further optimized for capacity will be even more biologically implausible. As described in section 5.2.3, the theory will need to be updated to account for JOIN's behavior. 
+Our equation produces a capacity of 3203070686178 while the Neuroidal model simulation only reaches around 250 memories over 20 runs before stopping due to excess interference. Therefore our equation in its current form cannot serve as a good approximation for the Neuroidal model's capacity however it is effectively a very loose upper bound on most models like these as the memory formation is not capacity optimized which we think makes sense biologically. We believe random memory generation is quite good for capacity and memory formation algorithms that are even further optimized for capacity will be even more biologically implausible. As described in section 5.2.3, the theory will need to be updated to account for JOIN's behavior. 
 
-
-    
-
-
-Finally, we made some attempts to gain some initial understanding of why memories formed by JOIN tend to interfere a lot more than randomly generated memories. We visualize the graphs and analyze the nodes with respect to two metrics: number of memories the nodes belong to and the number of interferences that have occured at those nodes. We choose the same parameters as before except we choose 1000 randomly inserted starting memories instead of 100. This will lead to overall higher capacity and allow us to analyze in more depth. Perrine has demonstrated that the capacity of the Neuroidal model scales up with the amount of starting memories \cite{perrine2023neural}. We are able to verify this as our simulation ended up producing around 1800 memories, in particular, an additional 800 JOINed memories as compared to the 150 with 100 starting memories. A possible explanation for this intriguing behavior would be that since these starting memories are randomly generated and follow our results that predict significantly low interference among them, they are making it harder for the system to reach the threshold in constraint 3 in definition 5, which can be interpreted as total interference over number of total memories in the system.
+Finally, we made some attempts to gain some initial understanding of why memories formed by JOIN tend to interfere a lot more than randomly generated memories. We visualize the graphs and analyze the nodes with respect to two metrics: number of memories the nodes belong to and the number of interferences that have occured at those nodes. We choose the same parameters as before except we choose 1000 randomly inserted starting memories instead of 100. This will lead to overall higher capacity and allow us to analyze in more depth. Perrine has demonstrated that the capacity of the Neuroidal model scales up with the amount of starting memories \cite{perrine2023neural}. We are able to verify this as our simulation ended up producing around 1800 memories, in particular, an additional 800 JOINed memories as compared to the 150 with 100 starting memories. A possible explanation for this intriguing behavior would be that since these starting memories are randomly generated and follow our results that predict significantly low interference among them, they are making it harder for the system to reach the threshold in constraint 3 in definition 3, since the simulation calculates the intereference rate using the number of total misfires at the state of the system over the number of total memories in the system.
 
 \begin{figure}%[h]
     \centering
     \includegraphics[scale=0.3]{graph_1200_memories.png}
-    \caption[Interference accumulation per node of Neuroidal model at 1200 memories]{Neuroidal model (n=500, d=128, w=16, r=40) at 1200 memories. Node value indicates number of interferences that occured at each node.}
+    \caption[Interference accumulation per node of Neuroidal model at 1200 memories]{Interference accumulation per node of Neuroidal model at 1200 memories. \textmd{Neuroidal model (n=500, d=128, w=16, r=40) at 1200 memories. Node value indicates number of interferences that occured at each node.}}
     \label{fig:sub1}
 \end{figure}
 
 \begin{figure}%[h]
     \centering
     \includegraphics[scale=0.3]{graph_1400_memories.png}
-    \caption[Interference accumulation per node of Neuroidal model at 1400 memories]{Neuroidal model (n=500, d=128, w=16, r=40) at 1400 memories. Node value indicates number of interferences that occured at each node.}
+    \caption[Interference accumulation per node of Neuroidal model at 1400 memories]{Interference accumulation per node of Neuroidal model at 1400 memories. \textmd{Neuroidal model (n=500, d=128, w=16, r=40) at 1400 memories. Node value indicates number of interferences that occured at each node.}}
     \label{fig:sub2}
 \end{figure}
 
 \begin{figure}%[h]
     \centering
     \includegraphics[scale=0.3]{graph_1600_memories.png}
-    \caption[Interference accumulation per node of Neuroidal model at 1600 memories]{Neuroidal model (n=500, d=128, w=16, r=40) at 1600 memories. Node value indicates number of interferences that occured at each node.}
+    \caption[Interference accumulation per node of Neuroidal model at 1600 memories]{Interference accumulation per node of Neuroidal model at 1600 memories. \textmd{Neuroidal model (n=500, d=128, w=16, r=40) at 1600 memories. Node value indicates number of interferences that occured at each node.}}
     \label{fig:sub3}
 \end{figure}
 
 \begin{figure}%[h]
     \centering
     \includegraphics[scale=0.3]{graph_final_memories.png}
-    \caption[Interference accumulation per node of Neuroidal model at capacity]{Neuroidal model (n=500, d=128, w=16, r=40) at capacity (1800 memories). Node value indicates number of interferences that occured at each node.}
+    \caption[Interference accumulation per node of Neuroidal model at capacity]{Interference accumulation per node of Neuroidal model at capacity. \textmd{Neuroidal model (n=500, d=128, w=16, r=40) at capacity (1800 memories). Node value indicates number of interferences that occured at each node.}}
     \label{fig:sub4}
 \end{figure}
 
 \begin{figure}%[h]
     \centering
     \includegraphics[scale=0.3]{graph_1200_n_memories.png}
-    \caption[Memory membership per node of Neuroidal model at 1200 memories]{Neuroidal model (n=500, d=128, w=16, r=40) at 1200 memories. Node value indicates memory membership of the node.}
+    \caption[Memory membership per node of Neuroidal model at 1200 memories]{Memory membership per node of Neuroidal model at 1200 memories. \textmd{Neuroidal model (n=500, d=128, w=16, r=40) at 1200 memories. Node value indicates memory membership of the node.}}
     \label{fig:subn1}
 \end{figure}
 
 \begin{figure}%[h]
     \centering
     \includegraphics[scale=0.3]{graph_1400_n_memories.png}
-    \caption[Memory membership per node of Neuroidal model at 1400 memories]{Neuroidal model (n=500, d=128, w=16, r=40) at 1400 memories. Node value indicates memory membership of the node.}
+    \caption[Memory membership per node of Neuroidal model at 1400 memories]{Memory membership per node of Neuroidal model at 1400 memories. \textmd{Neuroidal model (n=500, d=128, w=16, r=40) at 1400 memories. Node value indicates memory membership of the node.}}
     \label{fig:subn2}
 \end{figure}
 
 \begin{figure}%[h]
     \centering
     \includegraphics[scale=0.3]{graph_1600_n_memories.png}
-    \caption[Memory membership per node of Neuroidal model at 1600 memories]{Neuroidal model (n=500, d=128, w=16, r=40) at 1600 memories. Node value indicates memory membership of the node.}
+    \caption[Memory membership per node of Neuroidal model at 1600 memories]{Memory membership per node of Neuroidal model at 1600 memories. \textmd{Neuroidal model (n=500, d=128, w=16, r=40) at 1600 memories. Node value indicates memory membership of the node.}}
     \label{fig:subn3}
 \end{figure}
 
 \begin{figure}%[h]
     \centering
     \includegraphics[scale=0.3]{graph_final_n_memories.png}
-    \caption[Memory membership per node of Neuroidal model at capacity]{Neuroidal model (n=500, d=128, w=16, r=40) at capacity (1800 memories). Node value indicates memory membership of the node}
+    \caption[Memory membership per node of Neuroidal model at capacity]{Memory membership per node of Neuroidal model at capacity. \textmd{Neuroidal model (n=500, d=128, w=16, r=40) at capacity (1800 memories). Node value indicates memory membership of the node}}
     \label{fig:subn4}
 \end{figure}
 
 Figures \ref{fig:sub1} through \ref{fig:sub4} and \ref{fig:subn1} through \ref{fig:subn4} show the progression of the system from 1200 memories till the system reaches capacity with the value inside the node indicating the number of interferences that occured at that node and the number of memories the node belongs to respectively. The relative size of the node indicates the indegree of the node.  We observe that the interference is not uniformly distributed accross the nodes. And as we observe the pattern of evolution, we see that certain nodes end up with a lot of interference while many have negligible amount of interference. We also note that nodes that have already accumulated some interference have a higher chance of being a center of interference again. Practically, this indicates that some nodes are just innately more prone to interference than other nodes due to the initial edge layout. This is in constrast to our theory which assumes that the nodes are equal at the start and throughout the life of the system. We believe this is the primary factor that will need to be accounted for in attempts to update the theory and in particular, lemma \ref{lemma:k-int-prob} to be compatible with JOIN. We believe this is really challenging and leave it as future work. 
 
-We also note that the number of memories a node is part of has no correlation to the number of interferences at that node and therefore is not a good indicator of future interference at that node and cannot be used as a heuristic to update our estimate. There is some correlation between the in-degree and the interference and could provide intuition regarding updating lemma \ref{lemma:k-int-prob}. 
+We can also observe from the figures that the number of memories a node is part does not seem to have any correlation to the number of interferences at that node and therefore is not a good indicator of future interference at that node and cannot be used as a heuristic to update our estimate. There does seem to be some correlation between the in-degree and the interference and could provide intuition regarding updating lemma \ref{lemma:k-int-prob}. As such, we feel analyzing the in-degree distribution will be key to finding the capacity for JOIN. 
 
 
 

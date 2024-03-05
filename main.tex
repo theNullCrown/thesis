@@ -147,8 +147,6 @@
 
 \tableofcontents
 
-\listoftables
-
 \listoffigures
 
 % Add CHAPTER into table of contents.
@@ -171,13 +169,5 @@
 \makeatletter
 \addtocontents{toc}{\let\protect\l@chapter\protect\l@section}
 \makeatother
-
-% Hack to make Appendices to appear in Table of Contents
-\addtocontents{toc}{%
-   \noindent APPENDICES
-}
-\begin{appendices}
-\input{appendix-outline}
-\end{appendices}
 
 \end{document}

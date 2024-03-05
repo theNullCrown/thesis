@@ -8,15 +8,15 @@ Here we discuss some potential future work building off this study:
 
 \begin{itemize}
     \item Adapt lemma \ref{lemma:k-int-prob} to find the expected interference in the case of other memory creation algorithms like \begin{itemize}
-        \item JOIN
-        \item Project
-        \item Merge
-        \item Sequence Project. 
+        \item JOIN: This we believe will be the most challenging step as it involves deriving an estimate for the capacity based on the indegree distribution that is non-uniform throughout the graph and also over time. 
+        \item Project: We believe that once we have an estimate for JOIN, it will be very easy to find an estimate for Project as these are very similar operations however with slightly different goals. The main thing to note here wil be that assemblies are more densely connected than arbsets and that will the key here. 
+        \item Merge: We feel an estimate for merge would be very similar to those of JOIN and Project as it is essentially an amalgation of the two. 
+        \item Sequence Project: A analysis of the capacity of Sequence Project will be very interesting as it is the only algorithm we discussed that creates more than a single memory. We are excited to see how this will affect the analysis as well as final estimate. 
     \end{itemize}
-    We believe each one of these will provide considerable challenges due to their complex nature \cite{dabagia2023computation, papadimitriou2020brain,valiant2005memorization}. The rest of the theorems will follow similarly to be able to find the capacity of the model.
+    We believe each one of these will provide considerable challenges due to their complex nature \cite{dabagia2023computation, papadimitriou2020brain,valiant2005memorization}. The rest of the theorems will follow similarly to be able to find the capacity of the model and the final expression should have the same general structure. We also think the estimates will follow similar trends against the number of neurons and number of memories. 
     \item Instead of bounding the subset sizes, assume the subset sizes are drawn from a distribution with a given mean $r$ and find the expected subset capacity. This will involve finding the expectation of the hypergeometric PMF as a function of two random variables. 
 \end{itemize}
 
 \section{Closing thoughts}
 
-We believe this study will inspire more computational neuroscientists to tackle the intriguing question of capacity in contemporary models as well as upcoming models that plan to further demistify the human brain. 
+The study of capacity with regards to interference is really important as computational models of the brain need to keep the number of misfires low to be able to accumulate memories for a long period of time as well as maintain a high quality of retrieval.  We believe this study will inspire more computational neuroscientists to tackle the intriguing question of capacity in contemporary models as well as upcoming models that will further demistify the human brain. 
